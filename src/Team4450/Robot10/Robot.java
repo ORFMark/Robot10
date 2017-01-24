@@ -1,5 +1,5 @@
 // 2017 competition robot code.
-// For Robot "tba" built for FRC game "First SteamWorks".
+// For Robot "tba" built for FRC game "First STEAMWorks".
 
 package Team4450.Robot10;
 
@@ -75,10 +75,10 @@ public class Robot extends SampleRobot
     try
     {
     	Util.consoleLog(PROGRAM_NAME);
-    
+
+    	Util.consoleLog("RobotLib=%s", LibraryVersion.version);
+    	
         ds = DriverStation.getInstance();
-      	
-        Util.consoleLog("%s %s", PROGRAM_NAME, "end");
     }
     catch (Throwable e) {Util.logException(e);}
   }
