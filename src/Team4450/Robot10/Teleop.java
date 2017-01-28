@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Relay;
 class Teleop
 {
 	private final Robot 		robot;
+	private final BallControl	ballControl;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
 	private final ValveDA		shifterValve = new ValveDA(2);
@@ -53,6 +54,7 @@ class Teleop
 		if (launchPad != null) launchPad.dispose();
 		if (shifterValve != null) shifterValve.dispose();
 		if (ptoValve != null) ptoValve.dispose();
+		if (ballControl != null) ballControl.dispose();
 		//if (encoder != null) encoder.free();
 	}
 
