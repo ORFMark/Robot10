@@ -41,7 +41,8 @@ Util.consoleLog();
 	public void shooterSet(double power)
 	{
 		Util.consoleLog("%f", power);
-		intakeMotor.set(power);
+		shooterMotor1.set(power);
+		shooterMotor2.set(power);
 	}
 	public void intakeIn()
 	{
