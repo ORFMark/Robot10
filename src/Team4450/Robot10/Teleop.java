@@ -21,6 +21,7 @@ class Teleop
 {
 	private final Robot 		robot;
 	private final BallControl	ballControl;
+	private final Gear			gear;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
 	private final ValveDA		shifterValve = new ValveDA(2);
@@ -40,6 +41,8 @@ class Teleop
 		Util.consoleLog();
 
 		this.robot = robot;
+		ballControl=new BallControl(robot, this);
+		gear = new Gear(robot, this);
 	}
 
 	// Free all objects that need it.
