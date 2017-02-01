@@ -58,6 +58,7 @@ class Teleop
 		if (shifterValve != null) shifterValve.dispose();
 		if (ptoValve != null) ptoValve.dispose();
 		if (ballControl != null) ballControl.dispose();
+		if (gear != null) gear.dispose();
 		//if (encoder != null) encoder.free();
 	}
 
