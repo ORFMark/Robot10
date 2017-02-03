@@ -1,4 +1,3 @@
-
 package Team4450.Robot10;
 
 import java.lang.Math;
@@ -9,6 +8,10 @@ import org.opencv.imgproc.Imgproc;
 import Team4450.Lib.*;
 import Team4450.Lib.JoyStick.*;
 import Team4450.Lib.LaunchPad.*;
+
+import Team4450.Robot10.BallControl;
+import Team4450.robot10.Gear;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -41,8 +44,8 @@ class Teleop
 		Util.consoleLog();
 
 		this.robot = robot;
-		ballControl=new BallControl(robot, this);
-		gear = new Gear(robot, this);
+		gear=new Gear(robot, this);
+		ballControl= new Ballcontrol(robot, this);
 	}
 
 	// Free all objects that need it.
@@ -57,8 +60,6 @@ class Teleop
 		if (launchPad != null) launchPad.dispose();
 		if (shifterValve != null) shifterValve.dispose();
 		if (ptoValve != null) ptoValve.dispose();
-		if (ballControl != null) ballControl.dispose();
-		if (gear != null) gear.dispose();
 		//if (encoder != null) encoder.free();
 	}
 
