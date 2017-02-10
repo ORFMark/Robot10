@@ -30,11 +30,8 @@ import com.ctre.CANTalon.*;
 
 public class Robot extends SampleRobot 
 {
-<<<<<<< HEAD
-  static final String  	PROGRAM_NAME = "MRB10-01.23.17-01";
-=======
-  static final String  	PROGRAM_NAME = "RAC10-02.02.17-01";
->>>>>>> ORF4450/master
+  static final String  	PROGRAM_NAME = "MRB10-02.10.17-01";
+
 
   // Motor CAN ID/PWM port assignments (1=left-front, 2=left-rear, 3=right-front, 4=right-rear)
   CANTalon				LFCanTalon, LRCanTalon, RFCanTalon, RRCanTalon, LSlaveCanTalon, RSlaveCanTalon;
@@ -199,6 +196,8 @@ public class Robot extends SampleRobot
 		  SmartDashboard.putBoolean("FMS", ds.isFMSAttached());
 		  SmartDashboard.putBoolean("AutoTarget", false);
 		  SmartDashboard.putBoolean("TargetLocked", false);
+		  SmartDashboard.putBoolean("LowSpeed", false); 
+		  SmartDashboard.putBoolean("Neutral", false); 
 		  
 		  Util.consoleLog("end");
 	  }

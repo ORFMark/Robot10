@@ -10,7 +10,7 @@ import Team4450.Lib.JoyStick.*;
 import Team4450.Lib.LaunchPad.*;
 
 import Team4450.Robot10.BallControl;
-import Team4450.robot10.Gear;
+import Team4450.Robot10.Gear;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -45,7 +45,7 @@ class Teleop
 
 		this.robot = robot;
 		gear=new Gear(robot, this);
-		ballControl= new Ballcontrol(robot, this);
+		ballControl= new BallControl(robot, this);
 	}
 
 	// Free all objects that need it.
