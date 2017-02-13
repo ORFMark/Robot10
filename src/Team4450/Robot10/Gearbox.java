@@ -7,101 +7,72 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Gearbox {
 	private Robot robot;
-	public boolean highGear, lowGear, PTO, neutral;
+	public boolean highGear = false, lowGear = false, PTO = false, neutral = false, neutralSupport = false;
 	public ValveDA shifter = new ValveDA(0);
 	public ValveDA PTOvalve = new ValveDA(2);
+	public ValveSA  neutralValve = new ValveSA(4);
 	public Gearbox(Robot robot)
 	{
 		Util.consoleLog();
 		this.robot = robot;
 		PTOoff();
 		lowGear();
-		dashboardSet();
+		BoxStatus();
 	}
 	public void BoxStatus()
 	{
-		Util.consoleLog("HighGear: " + highGear, "lowGear: " + lowGear, "Neutral: " + neutral, "PTO: " + PTO);
+		Util.consoleLog("HighGear: " + highGear, "lowGear: " + lowGear, "Neutral Support" + neutralSupport, "Neutral: " + neutral, "PTO: " + PTO);
+		SmartDashboard.putBoolean("LowSpeed", lowGear);
+		SmartDashboard.putBoolean("PTO", PTO);
+		SmartDashboard.putBoolean("Neutral", neutral);
 	}
+
 	public void dispose()
 	{
 		Util.consoleLog();
 		if (shifter != null) shifter.dispose();
 		if (PTOvalve != null) PTOvalve.dispose();
-		dashboardSet();
-		BoxStatus();
+		if (neutralValve != null) neutralValve.dispose();
 	}
 	public void highGear()
 	{
 		Util.consoleLog();
-		shifter.SetA();  //FIXME get actual side
-		highGear = true;
-		lowGear = false;
+		shifter.SetB();
 		neutral = false;
-		dashboardSet();
+		lowGear = true;
 		BoxStatus();
 	}
 	public void lowGear()
 	{
 		Util.consoleLog();
-		shifter.SetB(); //FIXME get actual side
-		highGear = false;
-		lowGear = true;
+		shifter.SetA();
 		neutral = false;
-		dashboardSet();
+		lowGear = false;
 		BoxStatus();
 	}
 	public void neutral()
 	{
 		Util.consoleLog();
-		highGear = false;
-		lowGear = false;
-		neutral = true;
-		dashboardSet();
+		neutral = false;
 		BoxStatus();
 	}
 	public void PTOon()
 	{
 		Util.consoleLog();
-		PTOvalve.SetA(); //FIXME get actual side
+		neutral();
+		PTOvalve.SetA();
 		PTO = true;
-		dashboardSet();
 		BoxStatus();
 	}
 	public void PTOoff()
 	{
 		Util.consoleLog();
-		PTOvalve.SetB();
 		PTO = false;
-		dashboardSet();
+		PTOvalve.SetB();
+		lowGear();
 		BoxStatus();
 	}
-	public void dashboardSet()
-	{
-		Util.consoleLog();
-		if (lowGear)
-		{
-			SmartDashboard.putBoolean("LowSpeed", true); 
-		}
-		if (highGear)
-		{
-			SmartDashboard.putBoolean("LowSpeed", false);
-		}
-		if (PTO)
-		{
-			SmartDashboard.putBoolean("PTO", true);
-		}
-		if (!PTO)
-		{
-			SmartDashboard.putBoolean("PTO", false);
-		}
-		if (neutral)
-		{
-			SmartDashboard.putBoolean("Neutral", true);
-		}
-		if (!neutral)
-		{
-			SmartDashboard.putBoolean("Neutral", false); 
-		}
-			
-	}
 }
+
+
+	
