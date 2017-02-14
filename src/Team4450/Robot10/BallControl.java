@@ -13,7 +13,7 @@ import com.ctre.*;
 public class BallControl {
 	private final Robot robot;
 	private final Talon	intakeMotor = new Talon(0); //TODO get Port numbers;
-	private final Talon shooterMotor1 = new Talon(1);
+	private final Talon shooterMotor1 = new Talon(2);
 	private final Talon shooterMotor2 = new Talon (2);
 	public double Intake_Power, Shooter_Power;
 	BallControl (Robot robot, Teleop teleop)
@@ -38,12 +38,32 @@ public class BallControl {
 	{
 		Util.consoleLog("%f", power);
 		intakeMotor.set(power);
+		if (power != 0)
+		{
+			Util.consoleLog("Ball Intake Motor Active");
+			SmartDashboard.putBoolean("BallPickupMotor", true);
+		}
+		else
+		{
+			Util.consoleLog("Ball Intake Motor Stopped");
+			SmartDashboard.putBoolean("BallPickupMotor", false);
+		}
 	}
 	public void shooterSet(double power)
 	{
 		Util.consoleLog("%f", power);
 		shooterMotor1.set(power);
 		shooterMotor2.set(power);
+		if (power != 0)
+		{
+			Util.consoleLog("Shooter Motors Active");
+			SmartDashboard.putBoolean("ShooterMotor", true);
+		}
+		else
+		{
+			Util.consoleLog("Shooter Motors Stopped");
+			SmartDashboard.putBoolean("ShooterMotor", false);
+		}
 	}
 	public void intakeIn()
 	{
