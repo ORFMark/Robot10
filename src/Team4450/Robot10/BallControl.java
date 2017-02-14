@@ -12,9 +12,9 @@ import com.ctre.*;
 
 public class BallControl {
 	private final Robot robot;
-	private final CANTalon	intakeMotor = new CANTalon(0); //TODO get Port numbers;
-	private final CANTalon shooterMotor1 = new CANTalon(1);
-	private final CANTalon shooterMotor2 = new CANTalon (2);
+	private final Talon	intakeMotor = new Talon(0); //TODO get Port numbers;
+	private final Talon shooterMotor1 = new Talon(1);
+	private final Talon shooterMotor2 = new Talon (2);
 	public double Intake_Power, Shooter_Power;
 	BallControl (Robot robot, Teleop teleop)
 	
@@ -24,17 +24,15 @@ public class BallControl {
 		this.robot = robot;
 		Intake_Power= 0.75; //TODO Get true power readouts
 		Shooter_Power = 0.75;
-		robot.InitializeCANTalon(intakeMotor);
-		robot.InitializeCANTalon(shooterMotor1);
-		robot.InitializeCANTalon(shooterMotor2);
 		ceaseFire();
 		intakeStop();
 	}
 	public void dispose()
 	{
-		if (shooterMotor1 != null) shooterMotor1.delete();
-		if (shooterMotor2 != null) shooterMotor1.delete();
-		if (intakeMotor != null) intakeMotor.delete();
+		Util.consoleLog();
+		if (shooterMotor1 != null) shooterMotor1.free();
+		if (shooterMotor2 != null) shooterMotor2.free();
+		if (intakeMotor != null) intakeMotor.free();
 	}
 	public void intakeSet(double power)
 	{

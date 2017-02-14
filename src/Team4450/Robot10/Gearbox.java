@@ -3,6 +3,7 @@ package Team4450.Robot10;
 import Team4450.Lib.Util;
 import Team4450.Lib.ValveDA;
 import Team4450.Lib.ValveSA;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Gearbox {
@@ -10,7 +11,7 @@ public class Gearbox {
 	public boolean highGear = false, lowGear = false, PTO = false, neutral = false, neutralSupport = false;
 	public ValveDA shifter = new ValveDA(0);
 	public ValveDA PTOvalve = new ValveDA(2);
-	public ValveSA  neutralValve = new ValveSA(4);
+	public ValveDA  neutralValve = new ValveDA(4);  //TODO check for DA
 	public Gearbox(Robot robot)
 	{
 		Util.consoleLog();
@@ -37,7 +38,17 @@ public class Gearbox {
 	public void highGear()
 	{
 		Util.consoleLog();
-		shifter.SetB();
+		if (lowGear)
+			shifter.SetA();
+		else if (neutral)
+		{
+			neutralValve.SetA();
+			Timer.delay(0.5);
+			shifter.SetA();
+		}	
+		else if (!lowGear)
+			Util.consoleLog("Not Shifting, already set to Lowgear");
+			
 		neutral = false;
 		lowGear = true;
 		BoxStatus();
@@ -45,7 +56,16 @@ public class Gearbox {
 	public void lowGear()
 	{
 		Util.consoleLog();
-		shifter.SetA();
+		if (neutral)
+		shifter.SetB();
+		else if (!lowGear)
+		{
+			neutralValve.SetA();
+			Timer.delay(0.5);
+			shifter.SetB();
+		}
+		else if (lowGear)
+			Util.consoleLog("Not Shifting, already set to Highgear");
 		neutral = false;
 		lowGear = false;
 		BoxStatus();
@@ -53,7 +73,17 @@ public class Gearbox {
 	public void neutral()
 	{
 		Util.consoleLog();
-		neutral = false;
+		if (!lowGear)
+		{
+			neutralValve.SetA();
+		}
+		if (lowGear)
+		{
+			shifter.SetA();
+			Timer.delay(0.5);
+			nuetralValve.setA();
+		}
+		neutral = true;
 		BoxStatus();
 	}
 	public void PTOon()
@@ -71,6 +101,31 @@ public class Gearbox {
 		PTOvalve.SetB();
 		lowGear();
 		BoxStatus();
+	}
+	
+	public void transmission(String State)
+	{
+		switch(State)
+		{
+		case "High":
+			Util.consoleLog();
+			PTOoff();
+			highGear();
+			break;
+		case "Low":
+			Util.consoleLog();
+			PTOoff();
+			lowGear();
+			break;
+		case "Neutral":
+			Util.consoleLog();
+			neutral();
+			break;
+		default:
+			Util.consoleLog("Invalid Gear");
+			break;
+		}
+		
 	}
 }
 

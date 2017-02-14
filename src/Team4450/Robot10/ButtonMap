@@ -1,149 +1,159 @@
-+Port and Button Assignments. 
+Port and Button Assignments.
 
-+CAN Ports 
 
 
- 
-+Port	Device			Description 
- 
-+----------------------------------------------------------------------------------- 
+CAN Ports
 
+Port	Device			Description
 
- 
-+1		CanTalon		Left front drive motor. 
+-----------------------------------------------------------------------------------
 
+1		CanTalon		Left front drive motor.
 
- 
-+2		CanTalon		Left rear drive motor. 
+2		CanTalon		Left rear drive motor.
 
+3		CanTalon		Right front drive motor.
 
- 
-+3		CanTalon		Right front drive motor. 
+4		CanTalon		Right rear drive motor.
 
+5		CanTalon		Left slave drive motor (slaved to port 1).
 
- 
-+4		CanTalon		Right rear drive motor. 
+6		CanTalon		Right slave drive motor (slaved to port 3).
 
 
- 
-+5		CanTalon		Left slave drive motor (slaved to port 1). 
 
+PWM Ports
 
- 
-+6		CanTalon		Right slave drive motor (slaved to port 3). 
+Port	Device			Description
 
+-----------------------------------------------------------------------------------
 
- 
-+ 
+0		Talon			Ball pickup motor.
 
+1		Talon			Gear pickup motor.
 
- 
-+PWM Ports 
- 
-+Port	Device			Description 
+2		Talon			Shooter motor.
 
-+----------------------------------------------------------------------------------- 
 
 
- 
-+0		Talon			Ball pickup motor. 
+PCM 0 Ports
 
+Port	Device blk-pos	Description
 
- 
-+1		Talon			Gear pickup motor. 
+-----------------------------------------------------------------------------------
 
+0		ValveDA 0		A side high/low speed shifter. Set Low speed. On 3-pos cyl
 
- 
-+2		Talon			Shooter motor. 
-+---------------------------------------------------------------------------------- 
-+PCM 0 Ports 
+                                                       sets neutral. Must already
 
+                                                       be in high speed pos.
 
- 
-+Port	Device			Description 
+1		ValveDA	0		B side high/low speed shifter. Set High speed.
 
- 
-+----------------------------------------------------------------------------------- 
+2		ValveDA 2		A side PTO shifter. Engage PTO.
 
+3		ValveDA 2		B side PTO shifter. Disendage PTO.
 
- 
-+0		ValveDA 0		A side high/low speed shifter. 
+4		ValveSA 3		Neutral shifter. On 3-pos cyl sets low speed when cyl is
 
+                                         already in high speed position.
 
- 
-+1		ValveDA	0		B side high/low speed shifter. 
 
 
- 
-+ 
 
 
- 
-+ 
- 
-+Digital I/O Ports 
+Digital I/O Ports
 
+Port	Device			Description
 
- 
-+Port	Device			Description 
+-----------------------------------------------------------------------------------
 
 
- 
-+----------------------------------------------------------------------------------- 
- 
 
 
- 
-+Analog I/O Ports 
 
+Analog I/O Ports
 
- 
-+Port	Device			Description 
+Port	Device			Description
 
+-----------------------------------------------------------------------------------
 
- 
-+----------------------------------------------------------------------------------- 
+0		Gyro			Center gyro for straight travel.
 
 
- 
-+0		Gyro			Center gyro for straight travel. 
- 
-+Left Joystick 
 
 
- 
-+Button Name				Function 
 
+Left Joystick
 
- 
-+----------------------------------------------------------------------------------- 
+Button Name				Function
 
- 
-+Right Joystick 
+-----------------------------------------------------------------------------------
 
+Trigger					Toggle gearbox speed.
 
- 
-+Button Name				Function 
 
 
- 
-+----------------------------------------------------------------------------------- 
 
 
- 
-+Utility Joystick 
+Right Joystick
 
+Button Name				Function
 
- 
-+Button Name				Function 
- 
-+----------------------------------------------------------------------------------- 
+-----------------------------------------------------------------------------------
 
- 
-+LaunchPad 
+Top_Left				Change camera view.
 
 
- 
-+Button Name				Function 
- 
-+----------------------------------------------------------------------------------- 
+
+
+
+Utility Joystick
+
+Button Name				Function
+
+-----------------------------------------------------------------------------------
+
+
+
+
+
+LaunchPad
+
+Button Name				Function
+
+-----------------------------------------------------------------------------------
+
+Rocker_Left_Back		Toggle CanTalong brake mode.
+
+Button_Blue				Toggle PTO mode.
+
+Button_Yellow			Change camera view.
+
+
+
+
+
+Dashboard Indicators/Controls
+
+Name					Type			Description
+
+-----------------------------------------------------------------------------------
+
+AutoTarget				boolean			True when targeting code is running.
+
+TargetLocked			boolean			True when targeting completed with target
+
+                                        detected.
+
+BallPickupMotor			boolean			True when ball pickup motor is running.
+
+ShooterMotor			boolean			True when shooter motor is running.
+
+GearPickupMotor			boolean			True when gear pickup motor is running.
+
+GearPickupDown			boolean			True when gear pickup is in the down pos.
+
+LowSpeed				boolean			True when low speed is selected.
+
+Neutral					boolean			True when gearbox is in neutral
