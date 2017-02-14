@@ -50,7 +50,7 @@ public class Gearbox {
 			Util.consoleLog("Not Shifting, already set to Lowgear");
 			
 		neutral = false;
-		lowGear = true;
+		lowGear = false;
 		BoxStatus();
 	}
 	public void lowGear()
@@ -67,7 +67,7 @@ public class Gearbox {
 		else if (lowGear)
 			Util.consoleLog("Not Shifting, already set to Highgear");
 		neutral = false;
-		lowGear = false;
+		lowGear = true;
 		BoxStatus();
 	}
 	public void neutral()
@@ -75,14 +75,19 @@ public class Gearbox {
 		Util.consoleLog();
 		if (!lowGear)
 		{
-			neutralValve.SetA();
+			neutralValve.SetB();
 		}
-		if (lowGear)
+		else if (lowGear)
 		{
 			shifter.SetA();
 			Timer.delay(0.5);
-			nuetralValve.setA();
+			neutralValve.SetB();
 		}
+		else if (neutral)
+		{
+			Util.consoleLog("Not Shifting, already in Neutral");
+		}
+		lowGear = true;
 		neutral = true;
 		BoxStatus();
 	}
