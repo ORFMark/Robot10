@@ -12,7 +12,7 @@ public class Gearbox {
 	public ValveDA shifter = new ValveDA(0);
 	public ValveDA PTOvalve = new ValveDA(2);
 	public ValveDA  neutralValve = new ValveDA(4);  //TODO check for DA
-	public Gearbox(Robot robot)
+	public Gearbox(Robot robot, Teleop teleop)
 	{
 		Util.consoleLog();
 		this.robot = robot;
@@ -39,7 +39,9 @@ public class Gearbox {
 	{
 		Util.consoleLog();
 		if (lowGear)
+		{
 			shifter.SetA();
+	}
 		else if (neutral)
 		{
 			neutralValve.SetA();
