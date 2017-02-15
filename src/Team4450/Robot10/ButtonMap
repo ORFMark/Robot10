@@ -54,13 +54,16 @@ Port	Device blk-pos	Description
 
 3		ValveDA 2		B side PTO shifter. Disendage PTO.
 
-4		ValveSA 3		Neutral shifter. On 3-pos cyl sets low speed when cyl is
+4		ValveDA 4		A side: Neutral shifter. On 3-pos cyl sets low speed when cyl is
 
                                          already in high speed position.
 
+5		ValveDA 4		B side: Neutral shifter
+
+6		ValveDA 6		A side: Gear Pickup
 
 
-
+7		ValveDA 6		B side: Gear Pickup
 
 Digital I/O Ports
 
