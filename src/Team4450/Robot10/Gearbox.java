@@ -22,7 +22,7 @@ public class Gearbox {
 	}
 	public void BoxStatus()
 	{
-		Util.consoleLog("HighGear: " + highGear, "lowGear: " + lowGear, "Neutral Support" + neutralSupport, "Neutral: " + neutral, "PTO: " + PTO);
+		Util.consoleLog("HighGear: " + highGear + " lowGear: " + lowGear + " Neutral Support: " + neutralSupport + " Neutral: " + neutral + " PTO: " + PTO);
 		SmartDashboard.putBoolean("LowSpeed", lowGear);
 		SmartDashboard.putBoolean("PTO", PTO);
 		SmartDashboard.putBoolean("Neutral", neutral);
@@ -40,7 +40,7 @@ public class Gearbox {
 		Util.consoleLog();
 		if (lowGear)
 		{
-			shifter.SetA();
+			shifter.SetB();
 	}
 		else if (neutral)
 		{
@@ -49,7 +49,7 @@ public class Gearbox {
 			shifter.SetA();
 		}	
 		else if (!lowGear)
-			Util.consoleLog("Not Shifting, already set to Lowgear");
+			Util.consoleLog("Not Shifting, already set to Highgear");
 			
 		neutral = false;
 		lowGear = false;
@@ -58,16 +58,16 @@ public class Gearbox {
 	public void lowGear()
 	{
 		Util.consoleLog();
-		if (neutral)
-		shifter.SetB();
-		else if (!lowGear)
+		if (!lowGear)
+		shifter.SetA();
+		else if (!neutral)
 		{
 			neutralValve.SetA();
 			Timer.delay(0.5);
-			shifter.SetB();
+			shifter.SetA();
 		}
 		else if (lowGear)
-			Util.consoleLog("Not Shifting, already set to Highgear");
+			Util.consoleLog("Not Shifting, already set to Lowgear");
 		neutral = false;
 		lowGear = true;
 		BoxStatus();
