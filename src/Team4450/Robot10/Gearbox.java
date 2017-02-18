@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Gearbox {
 	private Robot robot;
-	public boolean highGear = false, lowGear = false, PTO = false, neutral = false, neutralSupport = false;
+	public boolean highGear = false, lowGear = false, PTO = false, neutral = false, neutralSupport = false, SAneutral = false;
 	public ValveDA shifter = new ValveDA(0);
 	public ValveDA PTOvalve = new ValveDA(2);
-	public ValveDA  neutralValve = new ValveDA(4);  //TODO check for DA
+	final ValveDA  neutralDAValve = new ValveDA(4);
+
 	public Gearbox(Robot robot, Teleop teleop)
 	{
 		Util.consoleLog();
@@ -22,8 +23,9 @@ public class Gearbox {
 	}
 	public void BoxStatus()
 	{
-		Util.consoleLog("HighGear: " + highGear + " lowGear: " + lowGear + " Neutral Support: " + neutralSupport + " Neutral: " + neutral + " PTO: " + PTO);
-		SmartDashboard.putBoolean("LowSpeed", lowGear);
+		Util.consoleLog("HighGear: " + highGear + ", lowGear: " + lowGear + ", NeutralSupport: " + neutralSupport + ", Neutral: " + neutral + ", PTO: " + PTO);
+		SmartDashboard.putBoolean("Low", lowGear);
+		SmartDashboard.putBoolean("High", highGear);
 		SmartDashboard.putBoolean("PTO", PTO);
 		SmartDashboard.putBoolean("Neutral", neutral);
 	}
@@ -33,43 +35,55 @@ public class Gearbox {
 		Util.consoleLog();
 		if (shifter != null) shifter.dispose();
 		if (PTOvalve != null) PTOvalve.dispose();
-		if (neutralValve != null) neutralValve.dispose();
+		if (neutralDAValve != null) neutralDAValve.dispose();
 	}
 	public void highGear()
 	{
 		Util.consoleLog();
 		if (lowGear)
 		{
+			neutralDAValve.SetB();
 			shifter.SetB();
-	}
+		}
 		else if (neutral)
 		{
-			neutralValve.SetA();
-			Timer.delay(0.5);
+
 			shifter.SetA();
+			Timer.delay(0.05);
+			neutralDAValve.SetA();
+			Timer.delay(0.05);
+			neutralDAValve.SetB();
+			shifter.SetB();
 		}	
 		else if (!lowGear)
 			Util.consoleLog("Not Shifting, already set to Highgear");
-			
+
 		neutral = false;
 		lowGear = false;
+		highGear = true;
 		BoxStatus();
 	}
 	public void lowGear()
 	{
 		Util.consoleLog();
 		if (!lowGear)
-		shifter.SetA();
-		else if (!neutral)
 		{
-			neutralValve.SetA();
-			Timer.delay(0.5);
+			neutralDAValve.SetB();
+			Timer.delay(0.05);
 			shifter.SetA();
+			Timer.delay(0.05);
+			neutralDAValve.SetA();
+
+		}
+		else if (neutral)
+		{
+			neutralDAValve.SetA();
 		}
 		else if (lowGear)
 			Util.consoleLog("Not Shifting, already set to Lowgear");
 		neutral = false;
 		lowGear = true;
+		highGear = false;
 		BoxStatus();
 	}
 	public void neutral()
@@ -77,20 +91,28 @@ public class Gearbox {
 		Util.consoleLog();
 		if (!lowGear)
 		{
-			neutralValve.SetB();
+			neutralDAValve.SetB();
+			Timer.delay(0.05);
+			shifter.SetA();
 		}
 		else if (lowGear)
 		{
-			shifter.SetA();
+
+			shifter.SetB();
+			Timer.delay(0.05);
+			neutralDAValve.SetB();
 			Timer.delay(0.5);
-			neutralValve.SetB();
+			shifter.SetA();
+
+
 		}
 		else if (neutral)
 		{
 			Util.consoleLog("Not Shifting, already in Neutral");
 		}
-		lowGear = true;
+		lowGear = false;
 		neutral = true;
+		highGear = false;
 		BoxStatus();
 	}
 	public void PTOon()
@@ -109,19 +131,17 @@ public class Gearbox {
 		lowGear();
 		BoxStatus();
 	}
-	
+
 	public void transmission(String State)
 	{
 		switch(State)
 		{
 		case "High":
 			Util.consoleLog();
-			PTOoff();
 			highGear();
 			break;
 		case "Low":
 			Util.consoleLog();
-			PTOoff();
 			lowGear();
 			break;
 		case "Neutral":
@@ -132,9 +152,9 @@ public class Gearbox {
 			Util.consoleLog("Invalid Gear");
 			break;
 		}
-		
+
 	}
 }
 
 
-	
+

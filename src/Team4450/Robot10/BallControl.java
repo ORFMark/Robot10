@@ -14,7 +14,7 @@ public class BallControl {
 	private final Robot robot;
 	private final Talon	intakeMotor = new Talon(0); //TODO get Port numbers;
 	private final Talon shooterMotor1 = new Talon(2);
-	private final Talon shooterMotor2 = new Talon (2);
+	private final Talon shooterMotor2 = new Talon (6);
 	public double Intake_Power, Shooter_Power;
 	BallControl (Robot robot, Teleop teleop)
 	
