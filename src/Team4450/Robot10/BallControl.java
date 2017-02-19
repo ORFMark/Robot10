@@ -14,7 +14,8 @@ public class BallControl {
 	private final Robot robot;
 	private final Talon	intakeMotor = new Talon(0); //TODO get Port numbers;
 	private final Talon shooterMotor1 = new Talon(2);
-	private final Talon shooterMotor2 = new Talon (6);
+	private final Talon shooterMotor2 = new Talon (3);
+	private final Talon shooterFeederMotor = new Talon(4);
 	public double Intake_Power, Shooter_Power;
 	BallControl (Robot robot, Teleop teleop)
 	
@@ -26,13 +27,16 @@ public class BallControl {
 		Shooter_Power = 0.75;
 		ceaseFire();
 		intakeStop();
+		choke();
 	}
 	public void dispose()
 	{
 		Util.consoleLog();
 		if (shooterMotor1 != null) shooterMotor1.free();
 		if (shooterMotor2 != null) shooterMotor2.free();
+		if (shooterFeederMotor !=null) shooterFeederMotor.free();
 		if (intakeMotor != null) intakeMotor.free();
+		
 	}
 	public void intakeSet(double power)
 	{
@@ -89,5 +93,15 @@ public class BallControl {
 	{
 		Util.consoleLog();
 		shooterSet(0);
+	}
+	public void feed()
+	{
+		Util.consoleLog();
+		shooterFeederMotor.set(1);
+	}
+	public void choke()
+	{
+		Util.consoleLog();
+		shooterFeederMotor.set(0);
 	}
 }

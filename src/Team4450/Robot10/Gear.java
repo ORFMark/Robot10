@@ -10,7 +10,8 @@ import Team4450.Lib.Util;
 public class Gear {
 	private final Robot robot;
 	private final Talon gearIntake = new Talon(1);
-	private final ValveDA	gearAcutuation = new ValveDA(6);
+	private final ValveDA	gearAcutuation = new ValveDA(1,0);
+	private final ValveDA   gearElevator = new ValveDA(6);
 	public double gearIntakePower = 0.75; //FIXME Get actual ID
 	Gear (Robot robot, Teleop teleop)
 	{
@@ -18,11 +19,13 @@ public class Gear {
 		this.robot=robot;
 		gearIntakeStop();
 		gearDown();
+		gearElevatorDown();
 	}
 public void dispose()
 {
 	if (gearIntake != null) gearIntake.free();
 	if (gearAcutuation != null) gearAcutuation.dispose();
+	if (gearElevator != null) gearElevator.dispose();
 }
 public void gearIntakeSet(double power)
 {
@@ -66,5 +69,15 @@ public void gearUp()
 	Util.consoleLog();
 	gearAcutuation.SetB(); //FIXME get actual ID
 	SmartDashboard.putBoolean("GearPickupDown", false);
+}
+public void gearElevatorUp()
+{
+	Util.consoleLog();
+	gearElevator.SetA();
+}
+public void gearElevatorDown()
+{
+	Util.consoleLog();
+	gearElevator.SetB();
 }
 }

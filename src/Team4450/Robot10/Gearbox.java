@@ -89,7 +89,7 @@ public class Gearbox {
 	public void neutral()
 	{
 		Util.consoleLog();
-		if (!lowGear)
+		if (highGear)
 		{
 			neutralDAValve.SetB();
 			Timer.delay(0.05);

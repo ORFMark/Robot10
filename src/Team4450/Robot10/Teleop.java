@@ -129,9 +129,8 @@ class Teleop
 
 			if (gearbox.PTO)
 			{
-				rightY = utilityStick.GetY();
-
-				leftY = rightY;
+				rightY = 0;
+				leftY = utilityStick.GetY();
 			} 
 			else
 			{
@@ -231,7 +230,30 @@ class Teleop
     				
 				case BUTTON_RED_RIGHT:
 					robot.navx.resetYaw();
-				
+				case BUTTON_RED:
+				{
+					if (launchPadEvent.control.latchedState)
+					{
+						gear.gearUp();
+					}
+					else
+					{
+						gear.gearDown();
+					}
+					break;
+				}
+				case BUTTON_BLUE_RIGHT:
+				{
+					if (launchPadEvent.control.latchedState)
+					{
+						gear.gearElevatorUp();
+					}
+					else
+					{
+						gear.gearElevatorDown();
+					}
+				}
+					
 				default:
 					break;
 			}
@@ -252,13 +274,19 @@ class Teleop
 	    	{
 				// Set CAN Talon brake mmode.
 	    		case ROCKER_LEFT_BACK:
+	    		{
     				if (control.latchedState)
     					robot.SetCANTalonBrakeMode(false);	// coast
     				else
     	    			robot.SetCANTalonBrakeMode(true);	// brake
     				
     				break;
-    				
+	    		}
+	    		case ROCKER_LEFT_FRONT:
+	    		{
+	    			robot.cameraThread.ChangeCamera();
+    				break;
+	    		}
 				default:
 					break;
 	    	}
@@ -338,8 +366,39 @@ class Teleop
 			{
 				// Trigger starts shoot sequence.
 				case TRIGGER:
+				{
+					if (button.latchedState)
+					{
+						ballControl.feed();
+					}
+					else
+					{
+						ballControl.choke();
+					}
     				break;
-				
+				}
+				case TOP_LEFT:
+				{
+					if (button.latchedState)
+					{
+						ballControl.fire();
+					}
+					else
+					{
+						ballControl.ceaseFire();
+					}
+				}
+				case TOP_RIGHT:
+				{
+					if (button.latchedState)
+					{
+						ballControl.intakeIn();
+					}
+					else
+					{
+						ballControl.intakeStop();
+					}
+				}
 				default:
 					break;
 			}
