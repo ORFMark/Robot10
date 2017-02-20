@@ -25,7 +25,7 @@ public class Climber {
 		gearbox.PTOon();
 		climbReady = true;
 	}
-	public void cancelClimp()
+	public void cancelClimb()
 	{
 		gearbox.PTOoff();
 		climbReady=false;

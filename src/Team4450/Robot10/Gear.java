@@ -21,63 +21,63 @@ public class Gear {
 		gearDown();
 		gearElevatorDown();
 	}
-public void dispose()
-{
-	if (gearIntake != null) gearIntake.free();
-	if (gearAcutuation != null) gearAcutuation.dispose();
-	if (gearElevator != null) gearElevator.dispose();
-}
-public void gearIntakeSet(double power)
-{
-	Util.consoleLog();
-	gearIntake.set(power);
-	if (power != 0)
+	public void dispose()
 	{
-		Util.consoleLog("Gear Intake Motor Active");
-		SmartDashboard.putBoolean("GearPickupMotor", true);
+		if (gearIntake != null) gearIntake.free();
+		if (gearAcutuation != null) gearAcutuation.dispose();
+		if (gearElevator != null) gearElevator.dispose();
 	}
-	else
+	public void gearIntakeSet(double power)
 	{
-		Util.consoleLog("Gear Intake Motor Stopped");
-		SmartDashboard.putBoolean("GearPickupMotor", false);
+		Util.consoleLog();
+		gearIntake.set(power);
+		if (power != 0)
+		{
+			Util.consoleLog("Gear Intake Motor Active");
+			SmartDashboard.putBoolean("GearPickupMotor", true);
+		}
+		else
+		{
+			Util.consoleLog("Gear Intake Motor Stopped");
+			SmartDashboard.putBoolean("GearPickupMotor", false);
+		}
 	}
-}
-public void gearIntakeIn()
-{
-	Util.consoleLog();
-	gearIntakeSet(gearIntakePower);
-}
-public void gearIntakeOut()
-{
-	Util.consoleLog();
-	gearIntakeSet(-gearIntakePower);
-}
-public void gearIntakeStop()
-{
-	Util.consoleLog();
-	gearIntakeSet(0);
-}
-public void gearDown()
-{
-	Util.consoleLog();
-	gearAcutuation.SetA(); //FIXME Get actual ID
-	SmartDashboard.putBoolean("GearPickupDown", true);
+	public void gearIntakeIn()
+	{
+		Util.consoleLog();
+		gearIntakeSet(gearIntakePower);
+	}
+	public void gearIntakeOut()
+	{
+		Util.consoleLog();
+		gearIntakeSet(-gearIntakePower);
+	}
+	public void gearIntakeStop()
+	{
+		Util.consoleLog();
+		gearIntakeSet(0);
+	}
+	public void gearDown()
+	{
+		Util.consoleLog();
+		gearAcutuation.SetA(); //FIXME Get actual ID
+		SmartDashboard.putBoolean("GearPickupDown", true);
 
-}
-public void gearUp()
-{
-	Util.consoleLog();
-	gearAcutuation.SetB(); //FIXME get actual ID
-	SmartDashboard.putBoolean("GearPickupDown", false);
-}
-public void gearElevatorUp()
-{
-	Util.consoleLog();
-	gearElevator.SetA();
-}
-public void gearElevatorDown()
-{
-	Util.consoleLog();
-	gearElevator.SetB();
-}
+	}
+	public void gearUp()
+	{
+		Util.consoleLog();
+		gearAcutuation.SetB(); //FIXME get actual ID
+		SmartDashboard.putBoolean("GearPickupDown", false);
+	}
+	public void gearElevatorUp()
+	{
+		Util.consoleLog();
+		gearElevator.SetA();
+	}
+	public void gearElevatorDown()
+	{
+		Util.consoleLog();
+		gearElevator.SetB();
+	}
 }

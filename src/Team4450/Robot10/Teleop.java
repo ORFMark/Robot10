@@ -30,13 +30,14 @@ class Teleop
 	public  LaunchPad			launchPad;
 	private boolean				autoTarget = false;
 
+
 	// Wheel encoder is plugged into dio port 1 - orange=+5v blue=signal, dio port 2 black=gnd yellow=signal. 
 	//private Encoder				encoder = new Encoder(1, 2, true, EncodingType.k4X);
 
 	// Encoder ribbon cable to dio ports: ribbon wire 2 = orange, 5 = yellow, 7 = blue, 10 = black
 
 	// Constructor.
-	
+
 	Teleop(Robot robot)
 	{
 		Util.consoleLog();
@@ -48,11 +49,11 @@ class Teleop
 	}
 
 	// Free all objects that need it.
-	
+
 	void dispose()
 	{
 		Util.consoleLog();
-		
+
 		if (leftStick != null) leftStick.dispose();
 		if (rightStick != null) rightStick.dispose();
 		if (utilityStick != null) utilityStick.dispose();
@@ -66,60 +67,60 @@ class Teleop
 	void OperatorControl()
 	{
 		double	rightY, leftY, utilX;
-        
-        // Motor safety turned off during initialization.
-        robot.robotDrive.setSafetyEnabled(false);
+
+		// Motor safety turned off during initialization.
+		robot.robotDrive.setSafetyEnabled(false);
 
 		Util.consoleLog();
-		
+
 		LCD.printLine(1, "Mode: OperatorControl");
 		LCD.printLine(2, "All=%s, Start=%d, FMS=%b", robot.alliance.name(), robot.location, robot.ds.isFMSAttached());
-		
+
 		// Initial setting of air valves.
 
-		
-		
+
+
 		// Configure LaunchPad and Joystick event handlers.
-		
+
 		launchPad = new LaunchPad(robot.launchPad, LaunchPadControlIDs.BUTTON_BLUE, this);
-		
+
 		LaunchPadControl lpControl = launchPad.AddControl(LaunchPadControlIDs.ROCKER_LEFT_BACK);
 		lpControl.controlType = LaunchPadControlTypes.SWITCH;
 
 		launchPad.AddControl(LaunchPadControlIDs.BUTTON_YELLOW);
 		launchPad.AddControl(LaunchPadControlIDs.BUTTON_RED_RIGHT);
-        launchPad.addLaunchPadEventListener(new LaunchPadListener());
-        launchPad.Start();
+		launchPad.addLaunchPadEventListener(new LaunchPadListener());
+		launchPad.Start();
 
 		leftStick = new JoyStick(robot.leftStick, "LeftStick", JoyStickButtonIDs.TRIGGER, this);
 		leftStick.addJoyStickEventListener(new LeftStickListener());
-        leftStick.Start();
-        
+		leftStick.Start();
+
 		rightStick = new JoyStick(robot.rightStick, "RightStick", JoyStickButtonIDs.TOP_LEFT, this);
-        rightStick.addJoyStickEventListener(new RightStickListener());
-        rightStick.Start();
-        
+		rightStick.addJoyStickEventListener(new RightStickListener());
+		rightStick.Start();
+
 		utilityStick = new JoyStick(robot.utilityStick, "UtilityStick", JoyStickButtonIDs.TRIGGER, this);
-        utilityStick.addJoyStickEventListener(new UtilityStickListener());
-        utilityStick.Start();
-        
-        // Tighten up dead zone for smoother turrent movement.
-        utilityStick.deadZone = .05;
+		utilityStick.addJoyStickEventListener(new UtilityStickListener());
+		utilityStick.Start();
+
+		// Tighten up dead zone for smoother turrent movement.
+		utilityStick.deadZone = .05;
 
 		// Set CAN Talon brake mode by rocker switch setting.
-        // We do this here so that the Utility stick thread has time to read the initial state
-        // of the rocker switch.
-        if (robot.isComp) robot.SetCANTalonBrakeMode(lpControl.latchedState);
-        
-        // Set gyro to heading 0.
-        robot.gyro.reset();
+		// We do this here so that the Utility stick thread has time to read the initial state
+		// of the rocker switch.
+		if (robot.isComp) robot.SetCANTalonBrakeMode(lpControl.latchedState);
 
-        //robot.navx.resetYaw();
-        //robot.navx.dumpValuesToNetworkTables();
-        
-        // Motor safety turned on.
-        robot.robotDrive.setSafetyEnabled(true);
-        
+		// Set gyro to heading 0.
+		robot.gyro.reset();
+
+		//robot.navx.resetYaw();
+		//robot.navx.dumpValuesToNetworkTables();
+
+		// Motor safety turned on.
+		robot.robotDrive.setSafetyEnabled(true);
+
 		// Driving loop runs until teleop is over.
 
 		while (robot.isEnabled() && robot.isOperatorControl())
@@ -135,32 +136,32 @@ class Teleop
 			else
 			{
 				rightY = stickLogCorrection(rightStick.GetY());	// fwd/back right
-    			leftY = stickLogCorrection(leftStick.GetY());	// fwd/back left
+				leftY = stickLogCorrection(leftStick.GetY());	// fwd/back left
 			}
-			
+
 			utilX = utilityStick.GetX();
-			
+
 			LCD.printLine(4, "leftY=%.4f  rightY=%.4f utilX=%.4f", leftY, rightY, utilX);
 			LCD.printLine(5, "gyroAngle=%d, gyroRate=%d", (int) robot.gyro.getAngle(), (int) robot.gyro.getRate());
 			//LCD.printLine(6, "yaw=%.0f, total=%.0f, rate=%.3f", robot.navx.getYaw(), robot.navx.getTotalYaw(), robot.navx.getYawRate());
-			
+
 			// Set wheel motors.
 			// Do not feed JS input to robotDrive if we are controlling the motors in automatic functions.
 
 			if (!autoTarget) robot.robotDrive.tankDrive(leftY, rightY);
 
 			// End of driving loop.
-			
+
 			Timer.delay(.020);	// wait 20ms for update from driver station.
 		}
-		
+
 		// End of teleop mode.
-		
+
 		Util.consoleLog("end");
 	}
 
 	// Map joystick y value of 0.0-1.0 to the motor working power range of approx 0.5-1.0
-	
+
 	private double stickCorrection(double joystickValue)
 	{
 		if (joystickValue != 0)
@@ -170,13 +171,13 @@ class Teleop
 			else
 				joystickValue = joystickValue / 1.5 - .4;
 		}
-		
+
 		return joystickValue;
 	}
-	
+
 	// Custom base logrithim.
 	// Returns logrithim base of the value.
-	
+
 	private double baseLog(double base, double value)
 	{
 		return Math.log(value) / Math.log(base);
@@ -184,229 +185,229 @@ class Teleop
 
 	// Map joystick y value of 0.0 to 1.0 to the motor working power range of approx 0.5 to 1.0 using
 	// logrithmic curve.
-	
+
 	private double stickLogCorrection(double joystickValue)
 	{
 		double base = Math.pow(2, 1/3) + Math.pow(2, 1/3);
-		
+
 		if (joystickValue > 0)
 			joystickValue = baseLog(base, joystickValue + 1);
 		else if (joystickValue < 0)
 			joystickValue = -baseLog(base, -joystickValue + 1);
-			
+
 		return joystickValue;
 	}
-	
+
 	// Transmission control functions.
-	
+
 	//--------------------------------------
-	
-	
+
+
 	// Handle LaunchPad control events.
-	
+
 	public class LaunchPadListener implements LaunchPadEventListener 
 	{
-	    public void ButtonDown(LaunchPadEvent launchPadEvent) 
-	    {
-	    	LaunchPadControl	control = launchPadEvent.control;
-	    	
+		public void ButtonDown(LaunchPadEvent launchPadEvent) 
+		{
+			LaunchPadControl	control = launchPadEvent.control;
+
 			Util.consoleLog("%s, latchedState=%b", control.id.name(),  control.latchedState);
-			
+
 			switch(control.id)
 			{
-				case BUTTON_YELLOW:
-					robot.cameraThread.ChangeCamera();
-    				break;
-    				
-				case BUTTON_BLUE:
-    				if (launchPadEvent.control.latchedState)
-    				{
-    					gearbox.PTOon();
-    				}
-        			else
-        				gearbox.PTOoff();
+			case BUTTON_YELLOW:
+				robot.cameraThread.ChangeCamera();
+				break;
 
-    				break;
-    				
-				case BUTTON_RED_RIGHT:
-					robot.navx.resetYaw();
-				case BUTTON_RED:
+			case BUTTON_BLUE:
+				if (launchPadEvent.control.latchedState)
 				{
-					if (launchPadEvent.control.latchedState)
-					{
-						gear.gearUp();
-					}
-					else
-					{
-						gear.gearDown();
-					}
-					break;
+					gearbox.PTOon();
 				}
-				case BUTTON_BLUE_RIGHT:
+				else
+					gearbox.PTOoff();
+
+				break;
+
+			case BUTTON_RED_RIGHT:
+				robot.navx.resetYaw();
+			case BUTTON_RED:
+			{
+				if (launchPadEvent.control.latchedState)
 				{
-					if (launchPadEvent.control.latchedState)
-					{
-						gear.gearElevatorUp();
-					}
-					else
-					{
-						gear.gearElevatorDown();
-					}
+					gear.gearUp();
 				}
-					
-				default:
-					break;
+				else
+				{
+					gear.gearDown();
+				}
+				break;
 			}
-	    }
-	    
-	    public void ButtonUp(LaunchPadEvent launchPadEvent) 
-	    {
-	    	//Util.consoleLog("%s, latchedState=%b", launchPadEvent.control.name(),  launchPadEvent.control.latchedState);
-	    }
+			case BUTTON_BLUE_RIGHT:
+			{
+				if (launchPadEvent.control.latchedState)
+				{
+					gear.gearElevatorUp();
+				}
+				else
+				{
+					gear.gearElevatorDown();
+				}
+			}
 
-	    public void SwitchChange(LaunchPadEvent launchPadEvent) 
-	    {
-	    	LaunchPadControl	control = launchPadEvent.control;
-	    	
-	    	Util.consoleLog("%s", control.id.name());
+			default:
+				break;
+			}
+		}
 
-	    	switch(control.id)
-	    	{
-				// Set CAN Talon brake mmode.
-	    		case ROCKER_LEFT_BACK:
-	    		{
-    				if (control.latchedState)
-    					robot.SetCANTalonBrakeMode(false);	// coast
-    				else
-    	    			robot.SetCANTalonBrakeMode(true);	// brake
-    				
-    				break;
-	    		}
-	    		case ROCKER_LEFT_FRONT:
-	    		{
-	    			robot.cameraThread.ChangeCamera();
-    				break;
-	    		}
-				default:
-					break;
-	    	}
-	    }
+		public void ButtonUp(LaunchPadEvent launchPadEvent) 
+		{
+			//Util.consoleLog("%s, latchedState=%b", launchPadEvent.control.name(),  launchPadEvent.control.latchedState);
+		}
+
+		public void SwitchChange(LaunchPadEvent launchPadEvent) 
+		{
+			LaunchPadControl	control = launchPadEvent.control;
+
+			Util.consoleLog("%s", control.id.name());
+
+			switch(control.id)
+			{
+			// Set CAN Talon brake mmode.
+			case ROCKER_LEFT_BACK:
+			{
+				if (control.latchedState)
+					robot.SetCANTalonBrakeMode(false);	// coast
+				else
+					robot.SetCANTalonBrakeMode(true);	// brake
+
+				break;
+			}
+			case ROCKER_LEFT_FRONT:
+			{
+				robot.cameraThread.ChangeCamera();
+				break;
+			}
+			default:
+				break;
+			}
+		}
 	}
 
 	// Handle Right JoyStick Button events.
-	
+
 	private class RightStickListener implements JoyStickEventListener 
 	{
-		
-	    public void ButtonDown(JoyStickEvent joyStickEvent) 
-	    {
-	    	JoyStickButton	button = joyStickEvent.button;
-	    	
+
+		public void ButtonDown(JoyStickEvent joyStickEvent) 
+		{
+			JoyStickButton	button = joyStickEvent.button;
+
 			Util.consoleLog("%s, latchedState=%b", button.id.name(),  button.latchedState);
-			
+
 			switch(button.id)
 			{
-				case TOP_LEFT:
-   					robot.cameraThread.ChangeCamera();
-    				break;
-				
-				default:
-					break;
-			}
-	    }
+			case TOP_LEFT:
+				robot.cameraThread.ChangeCamera();
+				break;
 
-	    public void ButtonUp(JoyStickEvent joyStickEvent) 
-	    {
-	    	//Util.consoleLog("%s", joyStickEvent.button.name());
-	    }
+			default:
+				break;
+			}
+		}
+
+		public void ButtonUp(JoyStickEvent joyStickEvent) 
+		{
+			//Util.consoleLog("%s", joyStickEvent.button.name());
+		}
 	}
 
 	// Handle Left JoyStick Button events.
-	
+
 	private class LeftStickListener implements JoyStickEventListener 
 	{
-	    public void ButtonDown(JoyStickEvent joyStickEvent) 
-	    {
-	    	JoyStickButton	button = joyStickEvent.button;
-	    	
+		public void ButtonDown(JoyStickEvent joyStickEvent) 
+		{
+			JoyStickButton	button = joyStickEvent.button;
+
 			Util.consoleLog("%s, latchedState=%b", button.id.name(),  button.latchedState);
-			
+
 			switch(button.id)
 			{
-				case TRIGGER:
-					if (button.latchedState)
-	    				gearbox.transmission("High");
-	    			else
-	    				gearbox.transmission("Low");
+			case TRIGGER:
+				if (button.latchedState)
+					gearbox.transmission("High");
+				else
+					gearbox.transmission("Low");
 
-					break;
-					
-				default:
-					break;
+				break;
+
+			default:
+				break;
 			}
-	    }
+		}
 
-	    public void ButtonUp(JoyStickEvent joyStickEvent) 
-	    {
-	    	//Util.consoleLog("%s", joyStickEvent.button.name());
-	    }
+		public void ButtonUp(JoyStickEvent joyStickEvent) 
+		{
+			//Util.consoleLog("%s", joyStickEvent.button.name());
+		}
 	}
 
 	// Handle Utility JoyStick Button events.
-	
+
 	private class UtilityStickListener implements JoyStickEventListener 
 	{
-	    public void ButtonDown(JoyStickEvent joyStickEvent) 
-	    {
-	    	JoyStickButton	button = joyStickEvent.button;
-	    	
+		public void ButtonDown(JoyStickEvent joyStickEvent) 
+		{
+			JoyStickButton	button = joyStickEvent.button;
+
 			Util.consoleLog("%s, latchedState=%b", button.id.name(),  button.latchedState);
-			
+
 			switch(button.id)
 			{
-				// Trigger starts shoot sequence.
-				case TRIGGER:
+			// Trigger starts shoot sequence.
+			case TRIGGER:
+			{
+				if (button.latchedState)
 				{
-					if (button.latchedState)
-					{
-						ballControl.feed();
-					}
-					else
-					{
-						ballControl.choke();
-					}
-    				break;
+					ballControl.feed();
 				}
-				case TOP_LEFT:
+				else
 				{
-					if (button.latchedState)
-					{
-						ballControl.fire();
-					}
-					else
-					{
-						ballControl.ceaseFire();
-					}
+					ballControl.choke();
 				}
-				case TOP_RIGHT:
-				{
-					if (button.latchedState)
-					{
-						ballControl.intakeIn();
-					}
-					else
-					{
-						ballControl.intakeStop();
-					}
-				}
-				default:
-					break;
+				break;
 			}
-	    }
+			case TOP_LEFT:
+			{
+				if (button.latchedState)
+				{
+					ballControl.fire();
+				}
+				else
+				{
+					ballControl.ceaseFire();
+				}
+			}
+			case TOP_RIGHT:
+			{
+				if (button.latchedState)
+				{
+					ballControl.intakeIn();
+				}
+				else
+				{
+					ballControl.intakeStop();
+				}
+			}
+			default:
+				break;
+			}
+		}
 
-	    public void ButtonUp(JoyStickEvent joyStickEvent) 
-	    {
-	    	//Util.consoleLog("%s", joyStickEvent.button.id.name());
-	    }
+		public void ButtonUp(JoyStickEvent joyStickEvent) 
+		{
+			//Util.consoleLog("%s", joyStickEvent.button.id.name());
+		}
 	}
 }

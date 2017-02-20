@@ -18,13 +18,13 @@ public class BallControl {
 	private final Talon shooterFeederMotor = new Talon(4);
 	public double Intake_Power, Shooter_Power;
 	BallControl (Robot robot, Teleop teleop)
-	
+
 	{
 		Util.consoleLog();
-		
+
 		this.robot = robot;
-		Intake_Power= 0.75; //TODO Get true power readouts
-		Shooter_Power = 0.75;
+		Intake_Power= 0.25; //TODO Get true power readouts
+		Shooter_Power = 0.90;
 		ceaseFire();
 		intakeStop();
 		choke();
@@ -36,7 +36,7 @@ public class BallControl {
 		if (shooterMotor2 != null) shooterMotor2.free();
 		if (shooterFeederMotor !=null) shooterFeederMotor.free();
 		if (intakeMotor != null) intakeMotor.free();
-		
+
 	}
 	public void intakeSet(double power)
 	{

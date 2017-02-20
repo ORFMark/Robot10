@@ -160,7 +160,7 @@ Button_Red				Toggles "gear wrist" piston.
 
 Button_Blue_Right			Set position of gear elevator to "Low" (To grab gear off of floor)
 
-Button_Yellow				Set position of gear elevator to "Middle" (To put gear on peg)
+Button_Yellow				Start Gear AutoIntake
 
 Button_Red_Right			Set position of gear elevator to "Hight" (To bring elevator out of way of fuel intake)
 
