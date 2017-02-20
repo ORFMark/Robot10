@@ -4,15 +4,17 @@ import Team4450.Lib.ValveDA;
 import Team4450.Robot10.Robot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import Team4450.Lib.LCD;
 
 import com.ctre.*;
 import Team4450.Lib.Util;
 public class Gear {
 	private final Robot robot;
-	private final Talon gearIntake = new Talon(1);
+	private final CANTalon gearIntake = new CANTalon(7);
 	private final ValveDA	gearAcutuation = new ValveDA(1,0);
 	private final ValveDA   gearElevator = new ValveDA(6);
 	public double gearIntakePower = 0.75; //FIXME Get actual ID
+	private Thread gearThread;
 	Gear (Robot robot, Teleop teleop)
 	{
 		Util.consoleLog();
@@ -20,10 +22,11 @@ public class Gear {
 		gearIntakeStop();
 		gearDown();
 		gearElevatorDown();
+		robot.InitializeCANTalon(gearIntake);
 	}
 	public void dispose()
 	{
-		if (gearIntake != null) gearIntake.free();
+		if (gearIntake != null) gearIntake.delete();
 		if (gearAcutuation != null) gearAcutuation.dispose();
 		if (gearElevator != null) gearElevator.dispose();
 	}
@@ -79,5 +82,49 @@ public class Gear {
 	{
 		Util.consoleLog();
 		gearElevator.SetB();
+	}
+	public void AutoPickup()
+	{
+		Util.consoleLog();
+		if(gearThread != null) return;
+		gearThread = new GearPickup();
+		gearThread.start();
+	}
+	public void StopAutoPickup()
+	{
+		Util.consoleLog();
+		if(gearThread != null) gearThread.interrupt();
+		gearThread = null;
+	}
+	
+	private class GearPickup extends Thread
+	{
+		GearPickup()
+		{
+			Util.consoleLog();
+			this.setName("AutoGearPickup");
+		}
+		public void run()
+		{
+			Util.consoleLog();
+			try
+			{
+				gearDown();
+				sleep(250);
+				gearIntakeIn();
+				while (!isInterrupted() && gearIntake.getOutputCurrent() < 1.0)
+				{
+					LCD.printLine(7, "gearmotor current=%f", gearIntake.getOutputCurrent()); 
+					sleep(50);
+				}
+			}
+			catch (InterruptedException e) {} 
+			catch (Throwable e) {e.printStackTrace(Util.logPrintStream);
+			gearIntakeStop();
+			gearUp();
+			gearThread = null;
+			}
+		}
+		
 	}
 }

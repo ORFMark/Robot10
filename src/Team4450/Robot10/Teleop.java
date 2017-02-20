@@ -28,7 +28,7 @@ class Teleop
 	private final Gearbox		gearbox;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
-	private boolean				autoTarget = false;
+	private boolean				autoTarget = false, invertDrive = false;
 
 
 	// Wheel encoder is plugged into dio port 1 - orange=+5v blue=signal, dio port 2 black=gnd yellow=signal. 
@@ -86,9 +86,12 @@ class Teleop
 
 		LaunchPadControl lpControl = launchPad.AddControl(LaunchPadControlIDs.ROCKER_LEFT_BACK);
 		lpControl.controlType = LaunchPadControlTypes.SWITCH;
+		lpControl.controlType = LaunchPadControlTypes.SWITCH;
 
 		launchPad.AddControl(LaunchPadControlIDs.BUTTON_YELLOW);
 		launchPad.AddControl(LaunchPadControlIDs.BUTTON_RED_RIGHT);
+		launchPad.AddControl(LaunchPadControlIDs.BUTTON_RED);
+		launchPad.AddControl(LaunchPadControlIDs.BUTTON_BLUE_RIGHT);
 		launchPad.addLaunchPadEventListener(new LaunchPadListener());
 		launchPad.Start();
 
@@ -101,6 +104,8 @@ class Teleop
 		rightStick.Start();
 
 		utilityStick = new JoyStick(robot.utilityStick, "UtilityStick", JoyStickButtonIDs.TRIGGER, this);
+		utilityStick.AddButton(JoyStickButtonIDs.TOP_LEFT);
+		utilityStick.AddButton(JoyStickButtonIDs.TOP_RIGHT);
 		utilityStick.addJoyStickEventListener(new UtilityStickListener());
 		utilityStick.Start();
 
@@ -133,6 +138,11 @@ class Teleop
 				rightY = 0;
 				leftY = utilityStick.GetY();
 			} 
+			else if (invertDrive)
+			{
+				rightY = stickLogCorrection(rightStick.GetY()*-1);	// fwd/back right
+				leftY = stickLogCorrection(leftStick.GetY()*-1);
+			}
 			else
 			{
 				rightY = stickLogCorrection(rightStick.GetY());	// fwd/back right
@@ -216,7 +226,10 @@ class Teleop
 			switch(control.id)
 			{
 			case BUTTON_YELLOW:
-				robot.cameraThread.ChangeCamera();
+				if (launchPadEvent.control.latchedState)
+					gear.AutoPickup();
+				else
+					gear.StopAutoPickup();
 				break;
 
 			case BUTTON_BLUE:
@@ -286,6 +299,7 @@ class Teleop
 			case ROCKER_LEFT_FRONT:
 			{
 				robot.cameraThread.ChangeCamera();
+				invertDrive = !invertDrive;
 				break;
 			}
 			default:
