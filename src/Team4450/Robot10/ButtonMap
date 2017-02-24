@@ -1,3 +1,46 @@
+Skip to content
+
+
+This repository
+ 
+Pull requests 
+Issues 
+Gist
+
+
+
+Sign out 
+
+
+ Unwatch 
+7 
+ Unstar 
+4 
+ Fork 
+10 
+
+ORF-4450/Robot10 
+ Code 
+ Issues 0 
+ Pull requests 0 
+ Projects 0 
+ Wiki 
+ Pulse 
+ Graphs 
+Tree: 89f0e55a1c 
+Find file 
+Copy path
+Robot10/src/Team4450/Robot10/Assignments 
+89f0e55 2 days ago 
+ Richard Corn As of bag and tag. 
+1 contributor 
+ 
+Raw
+Blame
+History
+   
+106 lines (85 sloc) 4.01 KB 
+
 Port and Button Assignments.
 
 
@@ -20,6 +63,8 @@ Port	Device			Description
 
 6		CanTalon		Right slave drive motor (slaved to port 3).
 
+7		CAnTalon		Gear pickup motor.
+
 
 
 
@@ -32,11 +77,9 @@ Port	Device			Description
 
 0		Talon			Ball pickup motor.
 
-1		Talon			Gear pickup motor.
+1		Talon			Shooter motor.
 
-2		Talon			Shooter motor.
-
-3		Talon			Shooter motor.
+2		Talon			Shooter dispenser motor.
 
 
 
@@ -92,6 +135,14 @@ Port	Device			Description
 
 -----------------------------------------------------------------------------------
 
+1		Encoder			Gearbox encoder. Orange = 5v, blue = signal.
+
+2		Encoder			Gearbox encoder. black = ground, yellow = signal.
+
+3		Encoder			Shooter encoder. Orange = 5v, blue = signal.
+
+4		Encoder			Shooter encoder. black = ground, yellow = signal.
+
 
 
 
@@ -102,7 +153,7 @@ Port	Device			Description
 
 -----------------------------------------------------------------------------------
 
-0		Gyro			Center gyro for straight travel.
+0		Gyro			Center gyro for straight travel. Not used for now.
 
 
 
@@ -125,6 +176,8 @@ Right Joystick
 Button Name				Function
 
 -----------------------------------------------------------------------------------
+
+Top_Left				Toggle camera view.
 
 
 
@@ -150,19 +203,19 @@ Button Name				Function
 
 -----------------------------------------------------------------------------------
 
-Rocker_Left_Back			Toggle CanTalon brake mode.
+Rocker_Left_Back		Toggle CanTalon brake mode.
 
-Rocker_Left_Front			Toggle camera view.
+Rocker_Left_Front		Toggle camera view.
 
 Button_Blue				Toggle PTO mode.
 
-Button_Red				Toggles "gear wrist" piston.
+Button_Red				Toggle "gear wrist" piston.
 
-Button_Blue_Right			Set position of gear elevator to "Low" (To grab gear off of floor)
+Button_Blue_Right		Toggle position of gear elevator to "Low" (To grab gear off of floor).
 
-Button_Yellow				Start Gear AutoIntake
+Button_Yellow			Toggle auto gear pickup.
 
-Button_Red_Right			Set position of gear elevator to "Hight" (To bring elevator out of way of fuel intake)
+Button_Red_Right		Toggle gear motor out (put gear on spring).
 
 
 
@@ -188,8 +241,10 @@ GearPickupMotor			boolean			True when gear pickup motor is running.
 
 GearPickupDown			boolean			True when gear pickup is in the down pos.
 
-LowSpeed				boolean			True when low speed is selected.
+Low						boolean			True when low speed is selected.
 
-HighSpeed				boolean			True when high speed is selected.
+High					boolean			True when high speed is selected.
 
 Neutral					boolean			True when gearbox is in neutral
+
+Feeder					boolean			True when ball feeder motor is running.

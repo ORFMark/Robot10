@@ -2,6 +2,7 @@ package Team4450.Robot10;
 
 import Team4450.Lib.ValveDA;
 import Team4450.Robot10.Robot;
+import Team4450.Lib.LaunchPad.LaunchPadControlIDs;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import Team4450.Lib.LCD;
@@ -10,18 +11,20 @@ import com.ctre.*;
 import Team4450.Lib.Util;
 public class Gear {
 	private final Robot robot;
+	private Teleop teleop;
 	private final CANTalon gearIntake = new CANTalon(7);
 	private final ValveDA	gearAcutuation = new ValveDA(1,0);
 	private final ValveDA   gearElevator = new ValveDA(6);
-	public double gearIntakePower = 0.75; //FIXME Get actual ID
+	public double gearIntakePower = 0.5; //FIXME Get actual ID
 	private Thread gearThread;
 	Gear (Robot robot, Teleop teleop)
 	{
 		Util.consoleLog();
 		this.robot=robot;
+		this.teleop=teleop;
 		gearIntakeStop();
 		gearDown();
-		gearElevatorDown();
+		gearElevatorUp();
 		robot.InitializeCANTalon(gearIntake);
 	}
 	public void dispose()
@@ -59,6 +62,11 @@ public class Gear {
 	{
 		Util.consoleLog();
 		gearIntakeSet(0);
+		if (teleop != null)
+		{
+			if (teleop.launchPad !=  null ) teleop.launchPad.FindButton(LaunchPadControlIDs.BUTTON_YELLOW).latchedState = false; 
+		}
+			
 	}
 	public void gearDown()
 	{
@@ -112,7 +120,7 @@ public class Gear {
 				gearDown();
 				sleep(250);
 				gearIntakeIn();
-				while (!isInterrupted() && gearIntake.getOutputCurrent() < 1.0)
+				while (!isInterrupted() && gearIntake.getOutputCurrent() < 1.5)
 				{
 					LCD.printLine(7, "gearmotor current=%f", gearIntake.getOutputCurrent()); 
 					sleep(50);

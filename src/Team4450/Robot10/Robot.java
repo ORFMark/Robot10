@@ -45,7 +45,7 @@ public class Robot extends SampleRobot
 
 	final Compressor		compressor = new Compressor(0);	// Compressor class represents the PCM. There are 2.
 	final Compressor		compressor1 = new Compressor(1);
-	final AnalogGyro		gyro = new AnalogGyro(0);		// gyro must be plugged into analog port 0 or 1.
+	//final AnalogGyro		gyro = new AnalogGyro(0);		// gyro must be plugged into analog port 0 or 1.
 
 	public Properties		robotProperties;
 
@@ -160,8 +160,8 @@ public class Robot extends SampleRobot
 
 			// Start camera server using our class for usb cameras.
 
-			//cameraThread = CameraFeed.getInstance(); 
-			//cameraThread.start();
+			cameraThread = CameraFeed.getInstance(); 
+			cameraThread.start();
 
 			// Start thread to monitor distance sensor.
 
@@ -170,7 +170,7 @@ public class Robot extends SampleRobot
 
 			// Create NavX object here so it has time to calibrate before we
 			// use it. Takes 10 seconds.
-			//navx = NavX.getInstance();
+			navx = NavX.getInstance();
 
 			Util.consoleLog("end");
 		}

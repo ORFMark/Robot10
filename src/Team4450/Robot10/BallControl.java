@@ -6,35 +6,41 @@ import Team4450.Lib.LaunchPad.LaunchPadControlIDs;
 import Team4450.Robot10.Robot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.*;
+import edu.wpi.first.wpilibj.Spark;
 
 public class BallControl {
 	private final Robot robot;
-	private final Talon	intakeMotor = new Talon(0); //TODO get Port numbers;
-	private final Talon shooterMotor1 = new Talon(2);
-	private final Talon shooterMotor2 = new Talon (3);
+	private final Spark	intakeMotor = new Spark(0); //TODO get Port numbers;
+	final Talon shooterMotor1 = new Talon(2);
+	private final Talon ShooterIndexer = new Talon (3);
 	private final Talon shooterFeederMotor = new Talon(4);
-	public double Intake_Power, Shooter_Power;
+	final Encoder encoder = new Encoder(3, 4, true, EncodingType.k4X);
+	public double Intake_Power, Shooter_Power, Indexer_Power, Feeder_Power;
 	BallControl (Robot robot, Teleop teleop)
 
 	{
 		Util.consoleLog();
-
 		this.robot = robot;
-		Intake_Power= 0.25; //TODO Get true power readouts
-		Shooter_Power = 0.90;
+		Intake_Power= 0.5; //TODO Get true power readouts
+		Shooter_Power = 1;
+		Indexer_Power = -0.3;
+		Feeder_Power =0.5;
 		ceaseFire();
 		intakeStop();
 		choke();
+		encoder.reset();
 	}
 	public void dispose()
 	{
 		Util.consoleLog();
 		if (shooterMotor1 != null) shooterMotor1.free();
-		if (shooterMotor2 != null) shooterMotor2.free();
+		if (ShooterIndexer != null) ShooterIndexer.free();
 		if (shooterFeederMotor !=null) shooterFeederMotor.free();
+		if (encoder != null) encoder.free();
 		if (intakeMotor != null) intakeMotor.free();
 
 	}
@@ -57,7 +63,6 @@ public class BallControl {
 	{
 		Util.consoleLog("%f", power);
 		shooterMotor1.set(power);
-		shooterMotor2.set(power);
 		if (power != 0)
 		{
 			Util.consoleLog("Shooter Motors Active");
@@ -84,24 +89,46 @@ public class BallControl {
 		Util.consoleLog();
 		intakeSet(0);
 	}
+	public void load()
+	{
+		Util.consoleLog("Loading the cannon");
+		ShooterIndexer.set(Indexer_Power);
+		shooterFeederMotor.set(Feeder_Power);
+		SmartDashboard.putBoolean("DispenserMotor", true);
+	}
+	public void Swab()
+	{
+		Util.consoleLog("Ceasing Loading");
+		ShooterIndexer.set(0);
+		shooterFeederMotor.set(0);
+		SmartDashboard.putBoolean("DispenserMotor", false);
+	}
 	public void fire()
 	{
 		Util.consoleLog();
+		load();
 		shooterSet(Shooter_Power);
 	}
 	public void ceaseFire()
 	{
 		Util.consoleLog();
 		shooterSet(0);
+		Swab();
 	}
 	public void feed()
 	{
 		Util.consoleLog();
-		shooterFeederMotor.set(1);
+		shooterFeederMotor.set(0.20);
 	}
 	public void choke()
 	{
 		Util.consoleLog();
 		shooterFeederMotor.set(0);
+	}
+	public void Vomit()
+	{
+		Util.consoleLog();
+		shooterFeederMotor.set(-.20);
+		SmartDashboard.putBoolean("DispenserMotor", true);
 	}
 }
