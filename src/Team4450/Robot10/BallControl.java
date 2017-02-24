@@ -125,7 +125,7 @@ public class BallControl {
 		Util.consoleLog();
 		shooterFeederMotor.set(0);
 	}
-	public void Vomit()
+	public void vomit()
 	{
 		Util.consoleLog();
 		shooterFeederMotor.set(-.20);

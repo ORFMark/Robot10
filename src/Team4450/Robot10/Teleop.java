@@ -411,7 +411,7 @@ class Teleop
 					ballControl.intakeIn();
 					if (ballControl.shooterMotor1.get() <= 0)
 					{
-						ballControl.Vomit();
+						ballControl.vomit();
 					}
 				}
 				else
