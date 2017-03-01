@@ -66,7 +66,7 @@ public class Gear {
 		{
 			if (teleop.launchPad !=  null ) teleop.launchPad.FindButton(LaunchPadControlIDs.BUTTON_YELLOW).latchedState = false; 
 		}
-			
+
 	}
 	public void gearDown()
 	{
@@ -104,7 +104,7 @@ public class Gear {
 		if(gearThread != null) gearThread.interrupt();
 		gearThread = null;
 	}
-	
+
 	private class GearPickup extends Thread
 	{
 		GearPickup()
@@ -133,6 +133,6 @@ public class Gear {
 			gearThread = null;
 			}
 		}
-		
+
 	}
 }
