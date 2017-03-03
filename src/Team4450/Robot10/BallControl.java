@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj.Spark;
 public class BallControl {
 	private final Robot robot;
 	private final Spark	intakeMotor = new Spark(0); //TODO get Port numbers;
-	final Talon shooterMotor1 = new Talon(2);
+	final Talon shooterMotor1 = new Talon(1);
 	private final Talon ShooterIndexer = new Talon (3);
-	private final Talon shooterFeederMotor = new Talon(4);
+	private final Talon shooterFeederMotor = new Talon(2);
 	final Encoder encoder = new Encoder(3, 4, true, EncodingType.k4X);
 	public double Intake_Power, Shooter_Power, Indexer_Power, Feeder_Power;
 	BallControl (Robot robot, Teleop teleop)

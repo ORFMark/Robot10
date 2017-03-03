@@ -62,7 +62,7 @@ public class Robot extends SampleRobot
 	CameraFeed			cameraThread;
 
 	NavX					navx;
-
+	ValveDA				unusedValve = new ValveDA(1,3);
 	// Constructor.
 
 	public Robot() throws IOException
@@ -159,9 +159,11 @@ public class Robot extends SampleRobot
 			monitorCompressorThread.start();
 
 			// Start camera server using our class for usb cameras.
-
-			cameraThread = CameraFeed.getInstance(); 
-			cameraThread.start();
+			if (isComp)
+			{
+				cameraThread = CameraFeed.getInstance(); 
+				cameraThread.start();
+			}
 
 			// Start thread to monitor distance sensor.
 
@@ -171,8 +173,9 @@ public class Robot extends SampleRobot
 			// Create NavX object here so it has time to calibrate before we
 			// use it. Takes 10 seconds.
 			navx = NavX.getInstance();
-
+			unusedValve.SetA();
 			Util.consoleLog("end");
+
 		}
 		catch (Throwable e) {Util.logException(e);}
 	}

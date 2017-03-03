@@ -87,7 +87,8 @@ class Teleop
 
 		LaunchPadControl lpControl = launchPad.AddControl(LaunchPadControlIDs.ROCKER_LEFT_BACK);
 		lpControl.controlType = LaunchPadControlTypes.SWITCH;
-		lpControl.controlType = LaunchPadControlTypes.SWITCH;
+		launchPad.AddControl(LaunchPadControlIDs.ROCKER_LEFT_BACK);
+
 
 		launchPad.AddControl(LaunchPadControlIDs.BUTTON_YELLOW);
 		launchPad.AddControl(LaunchPadControlIDs.BUTTON_RED_RIGHT);
@@ -107,6 +108,8 @@ class Teleop
 		utilityStick = new JoyStick(robot.utilityStick, "UtilityStick", JoyStickButtonIDs.TRIGGER, this);
 		utilityStick.AddButton(JoyStickButtonIDs.TOP_LEFT);
 		utilityStick.AddButton(JoyStickButtonIDs.TOP_RIGHT);
+		utilityStick.AddButton(JoyStickButtonIDs.TOP_MIDDLE);
+		utilityStick.AddButton(JoyStickButtonIDs.TOP_BACK);
 		utilityStick.addJoyStickEventListener(new UtilityStickListener());
 		utilityStick.Start();
 
@@ -300,7 +303,7 @@ class Teleop
 			case ROCKER_LEFT_FRONT:
 			{
 				robot.cameraThread.ChangeCamera();
-				invertDrive = !invertDrive;
+				//invertDrive = !invertDrive;
 				break;
 			}
 			default:
@@ -356,7 +359,38 @@ class Teleop
 					gearbox.transmission("Low");
 
 				break;
-
+			case TOP_LEFT:
+			{
+				if (button.latchedState)
+					ballControl.fire();
+				else
+					ballControl.ceaseFire();
+				break;
+			}
+			case TOP_RIGHT:
+			{
+				if (button.latchedState)
+					ballControl.intakeIn();
+				else
+					ballControl.intakeStop();
+				break;
+			}
+			case TOP_MIDDLE:
+			{
+				if (button.latchedState)
+					gear.gearIntakeIn();
+				else
+					gear.gearIntakeStop();
+				break;
+			}
+			case TOP_BACK:
+			{
+				if (button.latchedState)
+					gear.gearIntakeOut();
+				else
+					gear.gearIntakeStop();
+				break;
+			}
 			default:
 				break;
 			}

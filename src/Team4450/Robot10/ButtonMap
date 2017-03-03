@@ -1,46 +1,3 @@
-Skip to content
-
-
-This repository
- 
-Pull requests 
-Issues 
-Gist
-
-
-
-Sign out 
-
-
- Unwatch 
-7 
- Unstar 
-4 
- Fork 
-10 
-
-ORF-4450/Robot10 
- Code 
- Issues 0 
- Pull requests 0 
- Projects 0 
- Wiki 
- Pulse 
- Graphs 
-Tree: 89f0e55a1c 
-Find file 
-Copy path
-Robot10/src/Team4450/Robot10/Assignments 
-89f0e55 2 days ago 
- Richard Corn As of bag and tag. 
-1 contributor 
- 
-Raw
-Blame
-History
-   
-106 lines (85 sloc) 4.01 KB 
-
 Port and Button Assignments.
 
 
@@ -79,7 +36,9 @@ Port	Device			Description
 
 1		Talon			Shooter motor.
 
-2		Talon			Shooter dispenser motor.
+2		Talon			Shooter feeder motor.
+
+3		Talon			Shooter indexer motor.
 
 
 
@@ -113,6 +72,8 @@ Port	Device blk-pos	Description
 
 7		ValveDA 3		B side Gear pickup down position.
 
+                                                                                                       
+
 
 
 PCM 1 Ports
@@ -124,6 +85,10 @@ Port	Device blk-pos	Description
 0		ValveDA	4		A side Gear Pickup in position.
 
 1		VavleDA 4		B side Gear pickup out position.
+
+3		ValveDA 5		A side not used.
+
+4		ValveDA	5		B side not used.
 
 
 
@@ -195,6 +160,12 @@ Top_Left				Toggles spining up fuel shooter wheel.
 
 Top_Right				Toggles intake motors.
 
+Top_Middle				Toggles gear motor in.
+
+Top_Back                Toggles gear motor out (put gear on spring).
+
+
+
 
 
 LaunchPad
@@ -248,3 +219,5 @@ High					boolean			True when high speed is selected.
 Neutral					boolean			True when gearbox is in neutral
 
 Feeder					boolean			True when ball feeder motor is running.
+
+		  

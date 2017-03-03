@@ -120,11 +120,12 @@ public class Gear {
 				gearDown();
 				sleep(250);
 				gearIntakeIn();
-				while (!isInterrupted() && gearIntake.getOutputCurrent() < 1.5)
+				while (!isInterrupted() && gearIntake.getOutputCurrent() < 8.0)
 				{
-					LCD.printLine(7, "gearmotor current=%f", gearIntake.getOutputCurrent()); 
+					LCD.printLine(8, "gearmotor current=%f", gearIntake.getOutputCurrent()); 
 					sleep(50);
 				}
+				sleep(500);
 			}
 			catch (InterruptedException e) {} 
 			catch (Throwable e) {e.printStackTrace(Util.logPrintStream);
