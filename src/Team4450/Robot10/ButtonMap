@@ -1,223 +1,112 @@
 Port and Button Assignments.
 
-
-
 CAN Ports
-
 Port	Device			Description
-
 -----------------------------------------------------------------------------------
-
 1		CanTalon		Left front drive motor.
-
 2		CanTalon		Left rear drive motor.
-
 3		CanTalon		Right front drive motor.
-
 4		CanTalon		Right rear drive motor.
-
 5		CanTalon		Left slave drive motor (slaved to port 1).
-
 6		CanTalon		Right slave drive motor (slaved to port 3).
-
 7		CAnTalon		Gear pickup motor.
 
 
-
-
-
 PWM Ports
-
 Port	Device			Description
-
 -----------------------------------------------------------------------------------
-
 0		Talon			Ball pickup motor.
-
 1		Talon			Shooter motor.
-
 2		Talon			Shooter feeder motor.
-
 3		Talon			Shooter indexer motor.
 
 
-
-
-
 PCM 0 Ports
-
 Port	Device blk-pos	Description
-
 -----------------------------------------------------------------------------------
-
 0		ValveDA 0		A side high/low speed shifter. Set Low speed. On 3-pos cyl
-
                                                        sets neutral. Must already
-
                                                        be in high speed pos.
-
 1		ValveDA	0		B side high/low speed shifter. Set High speed.
-
 2		ValveDA 1		A side PTO shifter. Engage PTO.
-
 3		ValveDA 1		B side PTO shifter. Disendage PTO.
-
-4		ValveDA 2		A side neutral shifter. On 3-pos cyl sets low speed when cyl is
-
-                                        already in high speed position.
-
+4		ValveDA 2		A side neutral shifter. On 3-pos cyl sets low speed when cyl
+                                       is already in high speed position.
 5		VavleDA 2		B side not used. Blocked.	
-
-6		ValveDA 3		A side Gear pickup up position.
-
-7		ValveDA 3		B side Gear pickup down position.
-
+6		ValveDA 3		A side Gear Pickup lift up position.
+7		ValveDA 3		B side Gear Pickup lift down position.
                                                                                                        
 
-
-
 PCM 1 Ports
-
 Port	Device blk-pos	Description
-
 -----------------------------------------------------------------------------------
-
-0		ValveDA	4		A side Gear Pickup in position.
-
-1		VavleDA 4		B side Gear pickup out position.
-
+0		ValveDA	4		A side Gear Pickup elbow in position.
+1		VavleDA 4		B side Gear pickup elbow out position.
 3		ValveDA 5		A side not used.
-
 4		ValveDA	5		B side not used.
 
 
-
-
-
 Digital I/O Ports
-
 Port	Device			Description
-
 -----------------------------------------------------------------------------------
-
 1		Encoder			Gearbox encoder. Orange = 5v, blue = signal.
-
 2		Encoder			Gearbox encoder. black = ground, yellow = signal.
-
 3		Encoder			Shooter encoder. Orange = 5v, blue = signal.
-
 4		Encoder			Shooter encoder. black = ground, yellow = signal.
 
 
-
-
-
 Analog I/O Ports
-
 Port	Device			Description
-
 -----------------------------------------------------------------------------------
-
 0		Gyro			Center gyro for straight travel. Not used for now.
 
 
-
-
-
 Left Joystick
-
 Button Name				Function
-
 -----------------------------------------------------------------------------------
-
 Trigger					Toggle gearbox speed.
 
 
-
-
-
 Right Joystick
-
 Button Name				Function
-
 -----------------------------------------------------------------------------------
-
 Top_Left				Toggle camera view.
 
 
-
-
-
 Utility Joystick
-
 Button Name				Function
-
 -----------------------------------------------------------------------------------
-
 Trigger					Toggle despensing fuel to shooter.
-
 Top_Left				Toggles spining up fuel shooter wheel.
-
 Top_Right				Toggles intake motors.
-
 Top_Middle				Toggles gear motor in.
-
 Top_Back                Toggles gear motor out (put gear on spring).
 
 
-
-
-
 LaunchPad
-
 Button Name				Function
-
 -----------------------------------------------------------------------------------
-
 Rocker_Left_Back		Toggle CanTalon brake mode.
-
 Rocker_Left_Front		Toggle camera view.
-
 Button_Blue				Toggle PTO mode.
-
 Button_Red				Toggle "gear wrist" piston.
-
 Button_Blue_Right		Toggle position of gear elevator to "Low" (To grab gear off of floor).
-
 Button_Yellow			Toggle auto gear pickup.
-
 Button_Red_Right		Toggle gear motor out (put gear on spring).
 
 
-
-
-
 Dashboard Indicators/Controls
-
 Name					Type			Description
-
 -----------------------------------------------------------------------------------
-
 AutoTarget				boolean			True when targeting code is running.
-
 TargetLocked			boolean			True when targeting completed with target
-
                                         detected.
-
 BallPickupMotor			boolean			True when ball pickup motor is running.
-
 ShooterMotor			boolean			True when shooter motor is running.
-
 GearPickupMotor			boolean			True when gear pickup motor is running.
-
 GearPickupDown			boolean			True when gear pickup is in the down pos.
-
 Low						boolean			True when low speed is selected.
-
 High					boolean			True when high speed is selected.
-
 Neutral					boolean			True when gearbox is in neutral
-
 Feeder					boolean			True when ball feeder motor is running.
-
 		  

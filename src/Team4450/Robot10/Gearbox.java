@@ -13,7 +13,7 @@ public class Gearbox {
 	public ValveDA PTOvalve = new ValveDA(2);
 	final ValveDA  neutralDAValve = new ValveDA(4);
 
-	public Gearbox(Robot robot, Teleop teleop)
+	public Gearbox(Robot robot)
 	{
 		Util.consoleLog();
 		this.robot = robot;

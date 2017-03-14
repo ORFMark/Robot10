@@ -45,7 +45,7 @@ class Teleop
 		this.robot = robot;
 		gear=new Gear(robot, this);
 		ballControl= new BallControl(robot, this);
-		gearbox = new Gearbox(robot, this);
+		gearbox = new Gearbox(robot);
 		encoder.reset();
 	}
 
@@ -102,6 +102,7 @@ class Teleop
 		leftStick.Start();
 
 		rightStick = new JoyStick(robot.rightStick, "RightStick", JoyStickButtonIDs.TOP_LEFT, this);
+		rightStick.AddButton(JoyStickButtonIDs.TRIGGER);
 		rightStick.addJoyStickEventListener(new RightStickListener());
 		rightStick.Start();
 
@@ -139,7 +140,7 @@ class Teleop
 
 			if (gearbox.PTO)
 			{
-				rightY = 0;
+				rightY = stickLogCorrection(rightStick.GetY());
 				leftY = utilityStick.GetY();
 			} 
 			/* else if (invertDrive)
