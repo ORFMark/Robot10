@@ -31,13 +31,23 @@ public class Vision {
 	}
 	public boolean SeekPegOffset()
 	{
-		int centerX1, centerX2, pegX;
+		int centerX1 = 0, centerX2 = 0, pegX;
 		Util.consoleLog();
 		pegPipeline.process(robot.cameraThread.getCurrentImage());
-		if (pegPipeline.filterContoursOutput().size() > 2)
+		if (pegPipeline.filterContoursOutput().size() > 1)
 		{
 			targetRectangle1 = Imgproc.boundingRect(pegPipeline.filterContoursOutput().get(0));
 			targetRectangle1 = Imgproc.boundingRect(pegPipeline.filterContoursOutput().get(1));
+		}
+		if (targetRectangle1 != null)
+		{
+			Util.consoleLog("x1=%d y=%d c=%d h=%d w=%d cnt=%d", targetRectangle1.x, targetRectangle1.y, centerX1, targetRectangle1.height,
+					targetRectangle1.width, pegPipeline.filterContoursOutput().size());
+		}
+		if (targetRectangle2 != null)
+		{
+			Util.consoleLog("x2=%d y=%d c=%d h=%d w=%d cnt=%d", targetRectangle2.x, targetRectangle2.y, centerX2, targetRectangle2.height,
+					targetRectangle2.width, pegPipeline.filterContoursOutput().size());
 		}
 		if (targetRectangle1 != null && targetRectangle2 != null)
 		{
@@ -51,12 +61,6 @@ public class Vision {
 			{
 				pegX = ((centerX1 - centerX2)) + centerX2;			
 			}
-			Util.consoleLog("x1=%d y=%d c=%d h=%d w=%d cnt=%d", targetRectangle1.x, targetRectangle1.y, centerX1, targetRectangle1.height,
-
-					targetRectangle1.width, pegPipeline.filterContoursOutput().size());
-			Util.consoleLog("x2=%d y=%d c=%d h=%d w=%d cnt=%d", targetRectangle2.x, targetRectangle2.y, centerX2, targetRectangle2.height,
-
-					targetRectangle2.width, pegPipeline.filterContoursOutput().size());
 			pegOffset = imageCenter-pegX;
 			Util.consoleLog("cX1=%d  cX2=%d  pegX=%d  pegOffset=%d", centerX1, centerX2, pegX, pegOffset);
 			return true;

@@ -39,7 +39,7 @@ public class BallControl {
 		ceaseFire();
 		intakeStop();
 		choke();
-		encoder.reset();
+		//encoder.reset();
 		tlEncoder.reset();
 		tlEncoder.setDistancePerPulse(1);
 		tlEncoder.setPIDSourceType(PIDSourceType.kRate);
@@ -47,10 +47,9 @@ public class BallControl {
 		if (robot.isComp)
 		{
 			Shooter_LOWPower = .50;
-
 			Shooter_HIGHPower = .45;
-			Shooter_LOWRPM = 4900;
-			Shooter_HIGHRPM = 9000;
+			Shooter_LOWRPM = 2500;
+			Shooter_HIGHRPM = 3000;
 			PVALUE = .0025;
 			IVALUE = .0025;
 			DVALUE = .003; 	
@@ -58,13 +57,12 @@ public class BallControl {
 		else
 		{
 			Shooter_LOWPower = .50;
-
-			Shooter_HIGHPower = .70;
-			Shooter_LOWRPM = 4900;
-			Shooter_HIGHRPM = 9000;
-			PVALUE = .002;
-			IVALUE = .002;
-			DVALUE = .005; 
+			Shooter_HIGHPower = .45;
+			Shooter_LOWRPM = 2500;
+			Shooter_HIGHRPM = 3000;
+			PVALUE = .0025;
+			IVALUE = .0025;
+			DVALUE = .003; 
 		}
 	}
 	public void dispose()
@@ -73,7 +71,7 @@ public class BallControl {
 		if (shooterMotor1 != null) shooterMotor1.free();
 		if (ShooterIndexer != null) ShooterIndexer.free();
 		if (shooterFeederMotor !=null) shooterFeederMotor.free();
-		if (encoder != null) encoder.free();
+		//if (encoder != null) encoder.free();
 		if (intakeMotor != null) intakeMotor.free();
 		if (shooterPidController != null)
 		{
@@ -203,14 +201,14 @@ public class BallControl {
 	}
 	public class ShooterSpeedSource implements PIDSource
 	{
-		private Encoder encoder;
+		//private Encoder encoder;
 		private Counter counter;
 		private int inversion =1;
 		private double rpmAccumulator, rpmSampleCount;
 		
 		public ShooterSpeedSource(Encoder encoder)
 		{
-			this.encoder = encoder;
+			//this.encoder = encoder;
 		}
 		public ShooterSpeedSource(Counter counter)
 		{
@@ -220,7 +218,7 @@ public class BallControl {
 		@Override
 		public void setPIDSourceType(PIDSourceType pidSource)
 		{
-			if (encoder!= null) encoder.setPIDSourceType(pidSource);
+			//if (encoder!= null) encoder.setPIDSourceType(pidSource);
 			if (counter != null) counter.setPIDSourceType(pidSource);
 			
 		}
@@ -228,7 +226,7 @@ public class BallControl {
 		@Override
 		public PIDSourceType getPIDSourceType()
 		{
-			if (encoder != null) return encoder.getPIDSourceType();
+			//if (encoder != null) return encoder.getPIDSourceType();
 			if (counter != null) return counter.getPIDSourceType();
 			
 			return null;
@@ -242,28 +240,40 @@ public class BallControl {
 		}
 		public int get()
 		{
-			if (encoder != null) return encoder.get() * inversion;
+			//if (encoder != null) return encoder.get() * inversion;
 			if (counter != null) return counter.get() * inversion;
 			return 0;
 		}
 		public double getRate()
 		{
-			if (encoder != null) return encoder.getRate() * inversion;
+			//if (encoder != null) return encoder.getRate() * inversion;
 			if (counter != null) return counter.getRate() * inversion;
 			return 0;
 		}
 		@Override
 		public double pidGet()
 		{
+			if (encoder != null)
+			{
 			if (encoder.getPIDSourceType() == PIDSourceType.kRate)
 				return getRate();
 			else
-				return get();	
+				return get();
+			}
+			else if (counter != null)
+			{
+				if (counter.getPIDSourceType() == PIDSourceType.kRate)
+					return getRate();
+				else
+					return get();
+			}
+			else
+				return 0;
 		}
 		public void reset()
 		{
 			rpmAccumulator = rpmSampleCount = 0;
-			if (encoder != null) encoder.reset();
+		//	if (encoder != null) encoder.reset();
 			if (counter != null) counter.reset();
 		}
 		

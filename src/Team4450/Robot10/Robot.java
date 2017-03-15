@@ -30,7 +30,7 @@ import com.ctre.CANTalon.*;
 
 public class Robot extends SampleRobot 
 {
-	static final String  	PROGRAM_NAME = "MRB10-02.17.17-04";
+	static final String  	PROGRAM_NAME = "MRB10-3.15.17-01";
 
 
 	// Motor CAN ID/PWM port assignments (1=left-front, 2=left-rear, 3=right-front, 4=right-rear)
@@ -159,16 +159,16 @@ public class Robot extends SampleRobot
 			monitorCompressorThread.start();
 
 			// Start camera server using our class for usb cameras.
-			if (isComp)
-			{
+			//if (isComp)
+			//{
 				cameraThread = CameraFeed.getInstance(); 
 				cameraThread.start();
-			}
+			//}
 
-			// Start thread to monitor distance sensor.
+			// Start thread to monitor distance sensor, using AIO 1.
 
-			//monitorDistanceThread = MonitorDistanceMBX.getInstance(this);
-			//monitorDistanceThread.start();
+			monitorDistanceThread = MonitorDistanceMBX.getInstance(this);
+			monitorDistanceThread.start();
 
 			// Create NavX object here so it has time to calibrate before we
 			// use it. Takes 10 seconds.
