@@ -37,7 +37,7 @@ public class Vision {
 		if (pegPipeline.filterContoursOutput().size() > 1)
 		{
 			targetRectangle1 = Imgproc.boundingRect(pegPipeline.filterContoursOutput().get(0));
-			targetRectangle1 = Imgproc.boundingRect(pegPipeline.filterContoursOutput().get(1));
+			targetRectangle2 = Imgproc.boundingRect(pegPipeline.filterContoursOutput().get(1));
 		}
 		if (targetRectangle1 != null)
 		{

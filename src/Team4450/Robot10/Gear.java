@@ -58,6 +58,11 @@ public class Gear {
 		Util.consoleLog();
 		gearIntakeSet(-gearIntakePower);
 	}
+	public void gearHold()
+	{
+		Util.consoleLog();
+		gearIntakeSet(.50);
+	}
 	public void gearIntakeStop()
 	{
 		Util.consoleLog();
@@ -125,12 +130,24 @@ public class Gear {
 					LCD.printLine(8, "gearmotor current=%f", gearIntake.getOutputCurrent()); 
 					sleep(50);
 				}
+				if(!isInterrupted()) Util.consoleLog("Gear Detected");
+				gearHold();
 				sleep(500);
+				gearUp();
+				gearElevatorUp();
+				sleep(1000);
+				gearIntakeStop();
+				
 			}
-			catch (InterruptedException e) {} 
+			catch (InterruptedException e) {
+				gearIntakeStop();
+				gearUp();
+				gearElevatorUp();
+			} 
 			catch (Throwable e) {e.printStackTrace(Util.logPrintStream);
 			gearIntakeStop();
 			gearUp();
+			gearElevatorUp();
 			gearThread = null;
 			}
 		}

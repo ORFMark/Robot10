@@ -20,8 +20,8 @@ public class BallControl {
 	private final Robot robot;
 	private final Spark	intakeMotor = new Spark(0); //TODO get Port numbers;
 	final Talon shooterMotor1 = new Talon(1);
-	private final Talon ShooterIndexer = new Talon (3);
-	private final Talon shooterFeederMotor = new Talon(2);
+	private final Talon ShooterIndexer = new Talon (2);
+	private final Talon shooterFeederMotor = new Talon(3);
 	final Encoder encoder = new Encoder(3, 4, true, EncodingType.k4X);
 	public Counter tlEncoder = new Counter(0);
 	public double Intake_Power, Shooter_HIGHPower, Shooter_LOWPower, Shooter_HIGHRPM, Shooter_LOWRPM, Indexer_Power, Feeder_Power, PVALUE, IVALUE, DVALUE;
@@ -34,7 +34,7 @@ public class BallControl {
 		Util.consoleLog();
 		this.robot = robot;
 		Intake_Power= 0.8; //TODO Get true power readouts
-		Indexer_Power = -0.5;
+		Indexer_Power = -0.25;
 		Feeder_Power =0.5;
 		ceaseFire();
 		intakeStop();
@@ -49,10 +49,10 @@ public class BallControl {
 			Shooter_LOWPower = .50;
 			Shooter_HIGHPower = .45;
 			Shooter_LOWRPM = 2500;
-			Shooter_HIGHRPM = 3000;
+			Shooter_HIGHRPM = 3100;
 			PVALUE = .0025;
 			IVALUE = .0025;
-			DVALUE = .003; 	
+			DVALUE = .005;  //003 	
 		}
 		else
 		{
@@ -190,11 +190,12 @@ public class BallControl {
 		double pValue = SmartDashboard.getNumber("PValue", PVALUE);
 		double iValue = SmartDashboard.getNumber("IValue", IVALUE);
 		double dValue = SmartDashboard.getNumber("DValue", DVALUE);	
-		Util.consoleLog("%.0F p=%.4f i=%.4f d-%.4f", RPM, pValue, iValue, dValue);
+		Util.consoleLog("RPM =%.0F p=%.4f i=%.4f d-%.4f", RPM, pValue, iValue, dValue);
 		shooterPidController.setPID(pValue, iValue, dValue, 0.0);
 		shooterPidController.setSetpoint(RPM/60);
 		shooterPidController.setPercentTolerance(5);
 		shooterPidController.setToleranceBuffer(4096);
+		shooterPidController.setContinuous();
 		shooterSpeedSource.reset();
 		shooterPidController.enable();
 		

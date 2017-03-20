@@ -30,7 +30,7 @@ import com.ctre.CANTalon.*;
 
 public class Robot extends SampleRobot 
 {
-	static final String  	PROGRAM_NAME = "MRB10-3.15.17-01";
+	static final String  	PROGRAM_NAME = "MRB10-3.20.17-01";
 
 
 	// Motor CAN ID/PWM port assignments (1=left-front, 2=left-rear, 3=right-front, 4=right-rear)
@@ -114,7 +114,7 @@ public class Robot extends SampleRobot
 
 			// Initialize PID data entry fields on the DS to thier default values.
 
-			SmartDashboard.putBoolean("PIDEnabled", false);
+			SmartDashboard.putBoolean("PIDEnabled", true);
 			SmartDashboard.putNumber("PValue", 0);
 			SmartDashboard.putNumber("IValue", 0);
 			SmartDashboard.putNumber("DValue", 0);
