@@ -29,6 +29,10 @@ class Teleop
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
 	private boolean				autoTarget = false, invertDrive = false;
+	double output = 0;
+	double oldstick =0;
+	double newstick = 0;
+	double change = 0;
 
 
 	// Wheel encoder is plugged into dio port 1 - orange=+5v blue=signal, dio port 2 black=gnd yellow=signal. 
@@ -141,7 +145,7 @@ class Teleop
 			if (gearbox.PTO)
 			{
 				rightY = stickLogCorrection(rightStick.GetY());
-				leftY = utilityStick.GetY();
+				leftY = climbLogCorrection(leftStick.GetY());
 			} 
 			/* else if (invertDrive)
 			{
@@ -186,8 +190,8 @@ class Teleop
 			else
 				joystickValue = joystickValue / 1.5 - .4;
 		}
-
-		return joystickValue;
+		
+	    return joystickValue;
 	}
 
 	// Custom base logrithim.
@@ -209,8 +213,54 @@ class Teleop
 			joystickValue = baseLog(base, joystickValue + 1);
 		else if (joystickValue < 0)
 			joystickValue = -baseLog(base, -joystickValue + 1);
+		output = joystickValue;
+		if (output == 0) {
+	        newstick = 0;
+	    }
+	    else if (output >= 0)
+	    {
+	        if (change >= 0.05)
+	        {
+	            newstick = oldstick + (float) 0.05;
+	        }
+	        else if (change <= -0.05)
+	        {
+	            newstick = oldstick - (float) 0.05;
+	        }
+	        else newstick = output;
+	    }
+	    else if (output <= 0)
+	    {
+	        if (change >= 0.05)
+	        {
+	            newstick = oldstick - (float) 0.05;
+	        }
+	        else if (change <= -0.05)
+	        {
+	            newstick = oldstick + (float) 0.05;
+	        }
+	        else
+	        {
+	            newstick = output;
+	        }
+	    }
+	    else
+	        newstick = output;
+	    oldstick = newstick;
+	    return newstick;
+		//return joystickValue;
+	}
+	
+	private double climbLogCorrection(double joystickValue)
 
+	{
+		double base = Math.pow(13.5, 1/3);
+		if (joystickValue > 0)
+			joystickValue = baseLog(base, joystickValue + 1);
+		else if (joystickValue < 0)
+			joystickValue = -baseLog(base, -joystickValue + 1);
 		return joystickValue;
+
 	}
 
 	// Transmission control functions.
