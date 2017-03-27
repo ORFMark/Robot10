@@ -29,7 +29,7 @@ class Teleop
 	private final Vision 		vision;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
-	private boolean				autoTarget = false, invertDrive = false, jackRabbit = false;
+	private boolean				autoTarget = false, invertDrive = false, jackRabbit = true;
 	double output = 0;
 	double oldstick =0;
 	double newstick = 0;
@@ -227,11 +227,11 @@ class Teleop
 	    {
 	        if (change >= 0.05)
 	        {
-	            newstick = oldstick + (float) 0.05;
+	            newstick = oldstick + 0.05;
 	        }
 	        else if (change <= -0.05)
 	        {
-	            newstick = oldstick - (float) 0.05;
+	            newstick = oldstick - 0.05;
 	        }
 	        else newstick = output;
 	    }
@@ -239,11 +239,11 @@ class Teleop
 	    {
 	        if (change >= 0.05)
 	        {
-	            newstick = oldstick - (float) 0.05;
+	            newstick = oldstick - 0.05;
 	        }
 	        else if (change <= -0.05)
 	        {
-	            newstick = oldstick + (float) 0.05;
+	            newstick = oldstick + 0.05;
 	        }
 	        else
 	        {
@@ -263,7 +263,7 @@ class Teleop
 	private double climbLogCorrection(double joystickValue)
 
 	{
-		double base = Math.pow(13.5, 1/3);
+		double base = 2.2239800905693155211653633767222; //Math.pow(13.5, 1/3);
 		if (joystickValue > 0)
 			joystickValue = baseLog(base, joystickValue + 1);
 		else if (joystickValue < 0)
