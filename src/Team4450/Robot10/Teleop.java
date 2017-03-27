@@ -26,9 +26,10 @@ class Teleop
 	private final BallControl	ballControl;
 	private final Gear			gear;
 	private final Gearbox		gearbox;
+	private final Vision 		vision;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
-	private boolean				autoTarget = false, invertDrive = false;
+	private boolean				autoTarget = false, invertDrive = false, jackRabbit = false;
 	double output = 0;
 	double oldstick =0;
 	double newstick = 0;
@@ -50,6 +51,7 @@ class Teleop
 		gear=new Gear(robot, this);
 		ballControl= new BallControl(robot, this);
 		gearbox = new Gearbox(robot);
+		vision = Vision.getInstance(robot);
 		encoder.reset();
 	}
 
@@ -107,6 +109,8 @@ class Teleop
 
 		rightStick = new JoyStick(robot.rightStick, "RightStick", JoyStickButtonIDs.TOP_LEFT, this);
 		rightStick.AddButton(JoyStickButtonIDs.TRIGGER);
+		rightStick.AddButton(JoyStickButtonIDs.TOP_BACK);
+		rightStick.AddButton(JoyStickButtonIDs.TOP_LEFT);
 		rightStick.addJoyStickEventListener(new RightStickListener());
 		rightStick.Start();
 
@@ -159,7 +163,7 @@ class Teleop
 			}
 
 			utilX = utilityStick.GetX();
-
+			//LCD.printLine(3, "Distance=%.2f", robot.monitorDistanceThread.getRangeInches());
 			LCD.printLine(4, "leftY=%.4f  rightY=%.4f utilX=%.4f", leftY, rightY, utilX);
 			LCD.printLine(5, "encoder=%d,  shootenc=%d", ballControl.tlEncoder.get(), ballControl.encoder.get()); 
 			LCD.printLine(6, "yaw=%.0f, total=%.0f, rate=%.3f", robot.navx.getYaw(), robot.navx.getTotalYaw(), robot.navx.getYawRate());
@@ -213,6 +217,8 @@ class Teleop
 			joystickValue = baseLog(base, joystickValue + 1);
 		else if (joystickValue < 0)
 			joystickValue = -baseLog(base, -joystickValue + 1);
+		if (jackRabbit == false)
+		{
 		output = joystickValue;
 		if (output == 0) {
 	        newstick = 0;
@@ -248,6 +254,9 @@ class Teleop
 	        newstick = output;
 	    oldstick = newstick;
 	    return newstick;
+		}
+		else
+			return joystickValue;
 		//return joystickValue;
 	}
 	
@@ -370,16 +379,27 @@ class Teleop
 
 		public void ButtonDown(JoyStickEvent joyStickEvent) 
 		{
+			int angle;
 			JoyStickButton	button = joyStickEvent.button;
 
 			Util.consoleLog("%s, latchedState=%b", button.id.name(),  button.latchedState);
 
 			switch(button.id)
 			{
+			case TRIGGER:
+			{
+				if (robot.cameraThread != null) robot.cameraThread.ChangeCamera();
+			}
 			case TOP_LEFT:
 				robot.cameraThread.ChangeCamera();
 				break;
-
+			case TOP_BACK:
+			{
+				vision.SeekPegOffset();
+				angle = vision.getPegOffset();
+				Util.consoleLog("angle=%d", angle);
+				break;
+			}
 			default:
 				break;
 			}
@@ -459,6 +479,7 @@ class Teleop
 	{
 		public void ButtonDown(JoyStickEvent joyStickEvent) 
 		{
+			int angle;
 			JoyStickButton	button = joyStickEvent.button;
 
 			Util.consoleLog("%s, latchedState=%b", button.id.name(),  button.latchedState);
@@ -506,6 +527,7 @@ class Teleop
 						ballControl.choke();
 				}
 			}
+			
 			default:
 				break;
 			}

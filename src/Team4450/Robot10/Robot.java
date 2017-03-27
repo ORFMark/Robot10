@@ -58,7 +58,8 @@ public class Robot extends SampleRobot
 	DriverStation.Alliance	alliance;
 	int                       location;
 
-	Thread               	monitorBatteryThread, monitorDistanceThread, monitorCompressorThread;
+	Thread               	monitorBatteryThread, monitorPDPThread, monitorCompressorThread;
+	MonitorDistanceMBX		monitorDistanceThread;
 	CameraFeed			cameraThread;
 
 	NavX					navx;
@@ -149,7 +150,7 @@ public class Robot extends SampleRobot
 			//        gyro.initGyro();
 			//        gyro.setSensitivity(.007);	// Analog Devices model ADSR-S652.
 			//        gyro.calibrate();
-
+			NavX.getInstance();
 			// Start the battery, compressor and camera feed monitoring Tasks.
 
 			monitorBatteryThread = MonitorBattery.getInstance(ds);
@@ -172,7 +173,7 @@ public class Robot extends SampleRobot
 
 			// Create NavX object here so it has time to calibrate before we
 			// use it. Takes 10 seconds.
-			navx = NavX.getInstance();
+			
 			unusedValve.SetA();
 			Util.consoleLog("end");
 

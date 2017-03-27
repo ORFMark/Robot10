@@ -227,9 +227,15 @@ public class Autonomous
 			
 			
 			if (vision.SeekPegOffset())
-				angle = vision.getPegOffset();
+			{
+				angle = vision.getPegOffset();		
+				SmartDashboard.putBoolean("TargetLocked", true);
+			}
 			else
+			{
 				angle = 0;
+				SmartDashboard.putBoolean("TargetLocked", false);
+			}
 			
 			LCD.printLine(5, "angle=%d", (int) angle);
 			
@@ -241,7 +247,7 @@ public class Autonomous
 			
 			robot.robotDrive.drive(power, -angle * gain);
 			
-			Timer.delay(.020);
+			Timer.delay(.5);
 		}
 
 		robot.robotDrive.tankDrive(0, 0, true);				
