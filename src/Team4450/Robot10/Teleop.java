@@ -163,7 +163,7 @@ class Teleop
 			}
 
 			utilX = utilityStick.GetX();
-			//LCD.printLine(3, "Distance=%.2f", robot.monitorDistanceThread.getRangeInches());
+			//LCD.printLine(3, "Distance=%.2f", robot.monitorDistanceThread.getDistanceInches());
 			LCD.printLine(4, "leftY=%.4f  rightY=%.4f utilX=%.4f", leftY, rightY, utilX);
 			LCD.printLine(5, "encoder=%d,  shootenc=%d", ballControl.tlEncoder.get(), ballControl.encoder.get()); 
 			LCD.printLine(6, "yaw=%.0f, total=%.0f, rate=%.3f", robot.navx.getYaw(), robot.navx.getTotalYaw(), robot.navx.getYawRate());
