@@ -29,7 +29,7 @@ class Teleop
 	private final Vision 		vision;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
-	private boolean				autoTarget = false, invertDrive = false, jackRabbit = true;
+	private boolean				autoTarget = false, invertDrive = false, jackRabbit = false;
 	double output = 0;
 	double oldstick =0;
 	double newstick = 0;
@@ -217,7 +217,7 @@ class Teleop
 			joystickValue = baseLog(base, joystickValue + 1);
 		else if (joystickValue < 0)
 			joystickValue = -baseLog(base, -joystickValue + 1);
-		if (jackRabbit == false)
+		if (jackRabbit == true)
 		{
 		output = joystickValue;
 		if (output == 0) {
