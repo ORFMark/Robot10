@@ -37,7 +37,7 @@ class Teleop
 
 
 	// Wheel encoder is plugged into dio port 1 - orange=+5v blue=signal, dio port 2 black=gnd yellow=signal. 
-	private Encoder				encoder = new Encoder(1, 2, true, EncodingType.k4X);
+	//private Encoder				encoder = new Encoder(1, 2, true, EncodingType.k4X);
 
 	// Encoder ribbon cable to dio ports: ribbon wire 2 = orange, 5 = yellow, 7 = blue, 10 = black
 
@@ -49,10 +49,10 @@ class Teleop
 
 		this.robot = robot;
 		gear=new Gear(robot, this);
-		ballControl= new BallControl(robot, this);
+		ballControl= new BallControl(robot);
 		gearbox = new Gearbox(robot);
 		vision = Vision.getInstance(robot);
-		encoder.reset();
+		//encoder.reset();
 	}
 
 	// Free all objects that need it.
@@ -68,7 +68,7 @@ class Teleop
 		if (gear != null) gear.dispose();
 		if (ballControl != null) ballControl.dispose();
 		if (gearbox != null) gearbox.dispose();
-		if (encoder != null) encoder.free();
+		//if (encoder != null) encoder.free();
 	}
 
 	void OperatorControl()
@@ -131,10 +131,10 @@ class Teleop
 		if (robot.isComp) robot.SetCANTalonBrakeMode(lpControl.latchedState);
 
 		// Set gyro to heading 0.
-		robot.navx.resetYaw();
-
+		
 		//robot.navx.resetYaw();
 		//robot.navx.dumpValuesToNetworkTables();
+		robot.navx.resetYaw();
 
 		// Motor safety turned on.
 		robot.robotDrive.setSafetyEnabled(true);
@@ -163,7 +163,7 @@ class Teleop
 			}
 
 			utilX = utilityStick.GetX();
-			//LCD.printLine(3, "Distance=%.2f", robot.monitorDistanceThread.getDistanceInches());
+			LCD.printLine(3, "Distance=%.2f", robot.monitorDistanceThread.getRangeInches());
 			LCD.printLine(4, "leftY=%.4f  rightY=%.4f utilX=%.4f", leftY, rightY, utilX);
 			LCD.printLine(5, "encoder=%d,  shootenc=%d", ballControl.tlEncoder.get(), ballControl.encoder.get()); 
 			LCD.printLine(6, "yaw=%.0f, total=%.0f, rate=%.3f", robot.navx.getYaw(), robot.navx.getTotalYaw(), robot.navx.getYawRate());

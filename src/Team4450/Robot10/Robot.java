@@ -150,7 +150,7 @@ public class Robot extends SampleRobot
 			//        gyro.initGyro();
 			//        gyro.setSensitivity(.007);	// Analog Devices model ADSR-S652.
 			//        gyro.calibrate();
-			NavX.getInstance();
+			navx = NavX.getInstance();
 			// Start the battery, compressor and camera feed monitoring Tasks.
 
 			monitorBatteryThread = MonitorBattery.getInstance(ds);
@@ -162,8 +162,8 @@ public class Robot extends SampleRobot
 			// Start camera server using our class for usb cameras.
 			//if (isComp)
 			//{
-				cameraThread = CameraFeed.getInstance(); 
-				cameraThread.start();
+				//cameraThread = CameraFeed.getInstance(); 
+				//cameraThread.start();
 			//}
 
 			// Start thread to monitor distance sensor, using AIO 1.

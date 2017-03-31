@@ -28,7 +28,7 @@ public class BallControl {
 	private final PIDController shooterPidController;
 	public ShooterSpeedSource shooterSpeedSource = new ShooterSpeedSource(tlEncoder);
 	
-	BallControl (Robot robot, Teleop teleop)
+	BallControl (Robot robot)
 
 	{
 		Util.consoleLog();
@@ -36,20 +36,21 @@ public class BallControl {
 		Intake_Power= 0.8; //TODO Get true power readouts
 		Indexer_Power = -0.25;
 		Feeder_Power =0.5;
-		ceaseFire();
 		intakeStop();
 		choke();
-		//encoder.reset();
+		encoder.reset();
 		tlEncoder.reset();
 		tlEncoder.setDistancePerPulse(1);
 		tlEncoder.setPIDSourceType(PIDSourceType.kRate);
 		shooterPidController = new PIDController(0.0, 0.0, 0.0, shooterSpeedSource, shooterMotor1);
+		ceaseFire();
+		Util.consoleLog("Is ShooterPID Null: " + (shooterPidController == null));
 		if (robot.isComp)
 		{
 			Shooter_LOWPower = .50;
 			Shooter_HIGHPower = .45;
 			Shooter_LOWRPM = 2500;
-			Shooter_HIGHRPM = 3100;
+			Shooter_HIGHRPM = 3200;
 			PVALUE = .0025;
 			IVALUE = .0025;
 			DVALUE = .005;  //003 	
@@ -59,7 +60,7 @@ public class BallControl {
 			Shooter_LOWPower = .50;
 			Shooter_HIGHPower = .45;
 			Shooter_LOWRPM = 2500;
-			Shooter_HIGHRPM = 3000;
+			Shooter_HIGHRPM = 3200;
 			PVALUE = .0025;
 			IVALUE = .0025;
 			DVALUE = .003; 
@@ -71,11 +72,11 @@ public class BallControl {
 		if (shooterMotor1 != null) shooterMotor1.free();
 		if (ShooterIndexer != null) ShooterIndexer.free();
 		if (shooterFeederMotor !=null) shooterFeederMotor.free();
-		//if (encoder != null) encoder.free();
+		if (encoder != null) encoder.free();
 		if (intakeMotor != null) intakeMotor.free();
 		if (shooterPidController != null)
 		{
-			shooterPidController.disable();
+			if (shooterPidController.isEnabled()) shooterPidController.disable();
 			shooterPidController.free();
 		}
 		if (tlEncoder != null) tlEncoder.free();
@@ -84,7 +85,14 @@ public class BallControl {
 	public void intakeSet(double power)
 	{
 		Util.consoleLog("%f", power);
+		if (power == 0)
+		{
+			intakeMotor.set(0);
+		}
+		else
+		{
 		intakeMotor.set(power);
+		}
 		if (power != 0)
 		{
 			Util.consoleLog("Ball Intake Motor Active");
@@ -102,6 +110,9 @@ public class BallControl {
 		
 		if (SmartDashboard.getBoolean("PIDEnabled", false))
 		{ 
+			if (power == 0) {
+				shooterMotor1.set(0);
+			}
 			if (power == Shooter_LOWPower)
 			{
 				holdShooterRPM(SmartDashboard.getNumber("LowSetting", Shooter_LOWRPM));
@@ -190,8 +201,8 @@ public class BallControl {
 		double pValue = SmartDashboard.getNumber("PValue", PVALUE);
 		double iValue = SmartDashboard.getNumber("IValue", IVALUE);
 		double dValue = SmartDashboard.getNumber("DValue", DVALUE);	
-		Util.consoleLog("RPM =%.0F p=%.4f i=%.4f d-%.4f", RPM, pValue, iValue, dValue);
-		shooterPidController.setPID(pValue, iValue, dValue, 0.0);
+		Util.consoleLog("RPM =%.0f p=%.4f i=%.4f d-%.4f", RPM, pValue, iValue, dValue);
+		shooterPidController.setPID(pValue, iValue, dValue);
 		shooterPidController.setSetpoint(RPM/60);
 		shooterPidController.setPercentTolerance(5);
 		shooterPidController.setToleranceBuffer(4096);
@@ -207,10 +218,10 @@ public class BallControl {
 		private int inversion =1;
 		private double rpmAccumulator, rpmSampleCount;
 		
-		public ShooterSpeedSource(Encoder encoder)
-		{
+		//public ShooterSpeedSource(Encoder encoder)
+		//{
 			//this.encoder = encoder;
-		}
+		//}
 		public ShooterSpeedSource(Counter counter)
 		{
 			this.counter = counter;
