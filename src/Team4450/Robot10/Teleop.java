@@ -2,9 +2,6 @@ package Team4450.Robot10;
 
 import java.lang.Math;
 
-import org.opencv.core.Rect;
-import org.opencv.imgproc.Imgproc;
-
 import Team4450.Lib.*;
 import Team4450.Lib.JoyStick.*;
 import Team4450.Lib.LaunchPad.*;
@@ -12,13 +9,7 @@ import Team4450.Lib.LaunchPad.*;
 import Team4450.Robot10.BallControl;
 import Team4450.Robot10.Gear;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Relay;
 
 class Teleop
 {
@@ -48,7 +39,7 @@ class Teleop
 		Util.consoleLog();
 
 		this.robot = robot;
-		gear=new Gear(robot, this);
+		gear= new Gear(robot, this);
 		ballControl= new BallControl(robot);
 		gearbox = new Gearbox(robot);
 		vision = Vision.getInstance(robot);
@@ -165,7 +156,7 @@ class Teleop
 			utilX = utilityStick.GetX();
 			LCD.printLine(3, "Distance=%.2f", robot.monitorDistanceThread.getRangeInches());
 			LCD.printLine(4, "leftY=%.4f  rightY=%.4f utilX=%.4f", leftY, rightY, utilX);
-			LCD.printLine(5, "encoder=%d,  shootenc=%d", ballControl.tlEncoder.get(), ballControl.encoder.get()); 
+			LCD.printLine(5, "shootenc=%d", ballControl.tlEncoder.get()); 
 			LCD.printLine(6, "yaw=%.0f, total=%.0f, rate=%.3f", robot.navx.getYaw(), robot.navx.getTotalYaw(), robot.navx.getYawRate());
 
 			// Set wheel motors.

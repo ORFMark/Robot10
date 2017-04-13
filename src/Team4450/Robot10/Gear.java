@@ -3,7 +3,6 @@ package Team4450.Robot10;
 import Team4450.Lib.ValveDA;
 import Team4450.Robot10.Robot;
 import Team4450.Lib.LaunchPad.LaunchPadControlIDs;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import Team4450.Lib.LCD;
 
@@ -22,10 +21,11 @@ public class Gear {
 		Util.consoleLog();
 		this.robot=robot;
 		this.teleop=teleop;
+		robot.InitializeCANTalon(gearIntake);
 		gearIntakeStop();
 		gearDown();
 		gearElevatorUp();
-		robot.InitializeCANTalon(gearIntake);
+		
 	}
 	public void dispose()
 	{

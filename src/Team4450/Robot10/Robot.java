@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Properties;
 
 import Team4450.Lib.*;
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -30,7 +30,7 @@ import com.ctre.CANTalon.*;
 
 public class Robot extends SampleRobot 
 {
-	static final String  	PROGRAM_NAME = "MRB10-3.20.17-01";
+	static final String  	PROGRAM_NAME = "MRB10-3.31.17-05";
 
 
 	// Motor CAN ID/PWM port assignments (1=left-front, 2=left-rear, 3=right-front, 4=right-rear)
@@ -45,6 +45,7 @@ public class Robot extends SampleRobot
 
 	final Compressor		compressor = new Compressor(0);	// Compressor class represents the PCM. There are 2.
 	final Compressor		compressor1 = new Compressor(1);
+	
 	//final AnalogGyro		gyro = new AnalogGyro(0);		// gyro must be plugged into analog port 0 or 1.
 
 	public Properties		robotProperties;
@@ -276,7 +277,7 @@ public class Robot extends SampleRobot
 			compressor.setClosedLoopControl(SmartDashboard.getBoolean("CompressorEnabled", true));
 
 			// Start operator control process contained in the Teleop class.
-
+			
 			Teleop teleOp = new Teleop(this);
 
 			teleOp.OperatorControl();

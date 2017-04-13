@@ -1,15 +1,11 @@
 package Team4450.Robot10;
 
 import Team4450.Lib.Util;
-import Team4450.Lib.JoyStick.JoyStickButtonIDs;
-import Team4450.Lib.LaunchPad.LaunchPadControlIDs;
 import Team4450.Robot10.Robot;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.ctre.*;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.PIDController;
@@ -45,6 +41,7 @@ public class BallControl {
 		shooterPidController = new PIDController(0.0, 0.0, 0.0, shooterSpeedSource, shooterMotor1);
 		ceaseFire();
 		Util.consoleLog("Is ShooterPID Null: " + (shooterPidController == null));
+		Util.consoleLog("Is Counter Null: " + (tlEncoder == null));
 		if (robot.isComp)
 		{
 			Shooter_LOWPower = .50;
@@ -68,17 +65,19 @@ public class BallControl {
 	}
 	public void dispose()
 	{
+		Util.consoleLog("Is Counter Null: " + (tlEncoder == null));
 		Util.consoleLog();
-		if (shooterMotor1 != null) shooterMotor1.free();
-		if (ShooterIndexer != null) ShooterIndexer.free();
-		if (shooterFeederMotor !=null) shooterFeederMotor.free();
-		if (encoder != null) encoder.free();
-		if (intakeMotor != null) intakeMotor.free();
 		if (shooterPidController != null)
 		{
 			if (shooterPidController.isEnabled()) shooterPidController.disable();
 			shooterPidController.free();
 		}
+		if (shooterMotor1 != null) shooterMotor1.free();
+		if (ShooterIndexer != null) ShooterIndexer.free();
+		if (shooterFeederMotor !=null) shooterFeederMotor.free();
+		if (encoder != null) encoder.free();
+		if (intakeMotor != null) intakeMotor.free();
+		
 		if (tlEncoder != null) tlEncoder.free();
 
 	}
@@ -202,7 +201,7 @@ public class BallControl {
 		double iValue = SmartDashboard.getNumber("IValue", IVALUE);
 		double dValue = SmartDashboard.getNumber("DValue", DVALUE);	
 		Util.consoleLog("RPM =%.0f p=%.4f i=%.4f d-%.4f", RPM, pValue, iValue, dValue);
-		shooterPidController.setPID(pValue, iValue, dValue);
+		shooterPidController.setPID(pValue, iValue, dValue, 0.0);
 		shooterPidController.setSetpoint(RPM/60);
 		shooterPidController.setPercentTolerance(5);
 		shooterPidController.setToleranceBuffer(4096);

@@ -12,7 +12,7 @@ import Team4450.Lib.Util;
 public class Vision {
 	private static Vision vision;
 	private	Robot		  robot;
-	private int			  pegOffset = 0;
+	private int			  pegOffset = 0, pegDistance = 0;
 	private int			  imageCenter = CameraFeed.imageWidth/2;
 	private PegPipeline   pegPipeline = new PegPipeline();
 
@@ -56,10 +56,12 @@ public class Vision {
 			if (centerX1 < centerX2)
 			{
 				pegX = ((centerX2 - centerX1)/2) + centerX1;
+				pegDistance = centerX2-centerX1;
 			}
 			else
 			{
-				pegX = ((centerX1 - centerX2)) + centerX2;			
+				pegX = ((centerX1 - centerX2)) + centerX2;	
+				pegDistance = centerX1-centerX1;
 			}
 			pegOffset = imageCenter-pegX;
 			Util.consoleLog("cX1=%d  cX2=%d  pegX=%d  pegOffset=%d", centerX1, centerX2, pegX, pegOffset);
@@ -70,6 +72,10 @@ public class Vision {
 	public int getPegOffset()
 	{
 		return pegOffset;
+	}
+	public int getPegDistance()
+	{
+		return pegDistance;
 	}
 
 }
