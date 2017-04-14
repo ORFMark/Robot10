@@ -30,7 +30,7 @@ import com.ctre.CANTalon.*;
 
 public class Robot extends SampleRobot 
 {
-	static final String  	PROGRAM_NAME = "MRB10-3.31.17-05";
+	static final String  	PROGRAM_NAME = "MRB10-4.13.17-01";
 
 
 	// Motor CAN ID/PWM port assignments (1=left-front, 2=left-rear, 3=right-front, 4=right-rear)
@@ -163,8 +163,8 @@ public class Robot extends SampleRobot
 			// Start camera server using our class for usb cameras.
 			//if (isComp)
 			//{
-				//cameraThread = CameraFeed.getInstance(); 
-				//cameraThread.start();
+				cameraThread = CameraFeed.getInstance(); 
+				cameraThread.start();
 			//}
 
 			// Start thread to monitor distance sensor, using AIO 1.

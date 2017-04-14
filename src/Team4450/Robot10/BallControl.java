@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class BallControl {
 	private final Robot robot;
 	private final Spark	intakeMotor = new Spark(0); //TODO get Port numbers;
-	final Talon shooterMotor1 = new Talon(1);
-	private final Talon ShooterIndexer = new Talon (2);
+	final Talon shooterMotor1 = new Talon(2);
+	private final Talon ShooterIndexer = new Talon (1);
 	private final Talon shooterFeederMotor = new Talon(3);
 	final Encoder encoder = new Encoder(3, 4, true, EncodingType.k4X);
 	public Counter tlEncoder = new Counter(0);
@@ -31,7 +31,7 @@ public class BallControl {
 		this.robot = robot;
 		Intake_Power= 0.8; //TODO Get true power readouts
 		Indexer_Power = -0.25;
-		Feeder_Power =0.5;
+		Feeder_Power =0.8;
 		intakeStop();
 		choke();
 		encoder.reset();
@@ -55,7 +55,7 @@ public class BallControl {
 		else
 		{
 			Shooter_LOWPower = .50;
-			Shooter_HIGHPower = .45;
+			Shooter_HIGHPower = .80;
 			Shooter_LOWRPM = 2500;
 			Shooter_HIGHRPM = 3200;
 			PVALUE = .0025;
@@ -157,7 +157,7 @@ public class BallControl {
 	{
 		Util.consoleLog("Loading the cannon");
 		ShooterIndexer.set(Indexer_Power);
-		shooterFeederMotor.set(Feeder_Power);
+		//shooterFeederMotor.set(Feeder_Power);
 		SmartDashboard.putBoolean("DispenserMotor", true);
 	}
 	public void Swab()
@@ -182,7 +182,7 @@ public class BallControl {
 	public void feed()
 	{
 		Util.consoleLog();
-		shooterFeederMotor.set(0.20);
+		shooterFeederMotor.set(0.45);
 	}
 	public void choke()
 	{
@@ -192,7 +192,7 @@ public class BallControl {
 	public void vomit()
 	{
 		Util.consoleLog();
-		shooterFeederMotor.set(-.20);
+		shooterFeederMotor.set(-.45);
 		SmartDashboard.putBoolean("DispenserMotor", true);
 	}
 	private void holdShooterRPM(double RPM)
@@ -214,7 +214,7 @@ public class BallControl {
 	{
 		//private Encoder encoder;
 		private Counter counter;
-		private int inversion =1;
+		private int inversion = -1;
 		private double rpmAccumulator, rpmSampleCount;
 		
 		//public ShooterSpeedSource(Encoder encoder)

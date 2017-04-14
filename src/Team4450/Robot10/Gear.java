@@ -14,7 +14,7 @@ public class Gear {
 	private final CANTalon gearIntake = new CANTalon(7);
 	private final ValveDA	gearAcutuation = new ValveDA(1,0);
 	private final ValveDA   gearElevator = new ValveDA(6);
-	public double gearIntakePower = 0.5; //FIXME Get actual ID
+	public double gearIntakePower = 0.9; //FIXME Get actual ID
 	private Thread gearThread;
 	Gear (Robot robot, Teleop teleop)
 	{
@@ -25,7 +25,7 @@ public class Gear {
 		gearIntakeStop();
 		gearDown();
 		gearElevatorUp();
-		
+
 	}
 	public void dispose()
 	{
@@ -76,14 +76,14 @@ public class Gear {
 	public void gearDown()
 	{
 		Util.consoleLog();
-		gearAcutuation.SetA(); //FIXME Get actual ID
+		gearAcutuation.SetB(); //FIXME Get actual ID
 		SmartDashboard.putBoolean("GearPickupDown", true);
 
 	}
 	public void gearUp()
 	{
 		Util.consoleLog();
-		gearAcutuation.SetB(); //FIXME get actual ID
+		gearAcutuation.SetA(); //FIXME get actual ID
 		SmartDashboard.putBoolean("GearPickupDown", false);
 	}
 	public void gearElevatorUp()
@@ -123,21 +123,23 @@ public class Gear {
 			try
 			{
 				gearDown();
+				gearElevatorDown();
 				sleep(250);
 				gearIntakeIn();
-				while (!isInterrupted() && gearIntake.getOutputCurrent() < 8.0)
+				while (!isInterrupted() && gearIntake.getOutputCurrent() < 10.1)
 				{
 					LCD.printLine(8, "gearmotor current=%f", gearIntake.getOutputCurrent()); 
+					Util.consoleLog("Current: " + gearIntake.getOutputCurrent());
 					sleep(50);
 				}
-				if(!isInterrupted()) Util.consoleLog("Gear Detected");
+				if(!isInterrupted()) Util.consoleLog("Gear Detected Current: " + gearIntake.getOutputCurrent());
 				gearHold();
 				sleep(500);
 				gearUp();
 				gearElevatorUp();
 				sleep(1000);
 				gearIntakeStop();
-				
+
 			}
 			catch (InterruptedException e) {
 				gearIntakeStop();

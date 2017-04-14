@@ -140,7 +140,7 @@ class Teleop
 			if (gearbox.PTO)
 			{
 				rightY = stickLogCorrection(rightStick.GetY());
-				leftY = climbLogCorrection(leftStick.GetY());
+				leftY = climbLogCorrection(utilityStick.GetY());
 			} 
 			/* else if (invertDrive)
 			{
@@ -282,9 +282,15 @@ class Teleop
 			{
 			case BUTTON_YELLOW:
 				if (launchPadEvent.control.latchedState)
+				{
+					Util.consoleLog("Starting AutopickUp");
 					gear.AutoPickup();
+				}
 				else
+				{
+					Util.consoleLog("Interrupting Autopickup");
 					gear.StopAutoPickup();
+				}
 				break;
 
 			case BUTTON_BLUE:
