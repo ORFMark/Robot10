@@ -4,6 +4,7 @@ import Team4450.Lib.ValveDA;
 import Team4450.Robot10.Robot;
 import Team4450.Lib.LaunchPad.LaunchPadControlIDs;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import Team4450.Lib.JoyStick.JoyStickButtonIDs;
 import Team4450.Lib.LCD;
 
 import com.ctre.*;
@@ -16,6 +17,7 @@ public class Gear {
 	private final ValveDA   gearElevator = new ValveDA(6);
 	public double gearIntakePower = 0.9; //FIXME Get actual ID
 	private Thread gearThread;
+	public boolean gearOut = false;
 	Gear (Robot robot, Teleop teleop)
 	{
 		Util.consoleLog();
@@ -23,7 +25,7 @@ public class Gear {
 		this.teleop=teleop;
 		robot.InitializeCANTalon(gearIntake);
 		gearIntakeStop();
-		gearDown();
+		gearUp();
 		gearElevatorUp();
 
 	}
@@ -70,6 +72,8 @@ public class Gear {
 		if (teleop != null)
 		{
 			if (teleop.launchPad !=  null ) teleop.launchPad.FindButton(LaunchPadControlIDs.BUTTON_YELLOW).latchedState = false; 
+			if (teleop.launchPad !=  null ) teleop.utilityStick.FindButton(JoyStickButtonIDs.TOP_BACK).latchedState = false; 
+			if (teleop.launchPad !=  null ) teleop.utilityStick.FindButton(JoyStickButtonIDs.TOP_MIDDLE).latchedState = false; 
 		}
 
 	}
@@ -78,6 +82,7 @@ public class Gear {
 		Util.consoleLog();
 		gearAcutuation.SetB(); //FIXME Get actual ID
 		SmartDashboard.putBoolean("GearPickupDown", true);
+		gearOut = true;
 
 	}
 	public void gearUp()
@@ -85,6 +90,7 @@ public class Gear {
 		Util.consoleLog();
 		gearAcutuation.SetA(); //FIXME get actual ID
 		SmartDashboard.putBoolean("GearPickupDown", false);
+		gearOut = false;
 	}
 	public void gearElevatorUp()
 	{
@@ -98,7 +104,7 @@ public class Gear {
 	}
 	public void AutoPickup()
 	{
-		Util.consoleLog();
+		Util.consoleLog("Is gearThread null? " + (gearThread == null));
 		if(gearThread != null) return;
 		gearThread = new GearPickup();
 		gearThread.start();
@@ -126,6 +132,7 @@ public class Gear {
 				gearElevatorDown();
 				sleep(250);
 				gearIntakeIn();
+				sleep(250);
 				while (!isInterrupted() && gearIntake.getOutputCurrent() < 10.1)
 				{
 					LCD.printLine(8, "gearmotor current=%f", gearIntake.getOutputCurrent()); 
@@ -142,15 +149,18 @@ public class Gear {
 
 			}
 			catch (InterruptedException e) {
+				Util.consoleLog();
 				gearIntakeStop();
 				gearUp();
 				gearElevatorUp();
+				gearThread = null;
 			} 
 			catch (Throwable e) {e.printStackTrace(Util.logPrintStream);
 			gearIntakeStop();
 			gearUp();
 			gearElevatorUp();
 			gearThread = null;
+			if (teleop != null) teleop.launchPad.FindButton(LaunchPadControlIDs.BUTTON_YELLOW).latchedState = false;
 			}
 		}
 

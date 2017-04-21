@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class BallControl {
 	private final Robot robot;
 	private final Spark	intakeMotor = new Spark(0); //TODO get Port numbers;
-	final Talon shooterMotor1 = new Talon(2);
-	private final Talon ShooterIndexer = new Talon (1);
+	final Talon shooterMotor1 = new Talon(1);
+	private final Talon ShooterIndexer = new Talon (2);
 	private final Talon shooterFeederMotor = new Talon(3);
-	final Encoder encoder = new Encoder(3, 4, true, EncodingType.k4X);
+	//final Encoder encoder = new Encoder(3, 4, true, EncodingType.k4X);
 	public Counter tlEncoder = new Counter(0);
 	public double Intake_Power, Shooter_HIGHPower, Shooter_LOWPower, Shooter_HIGHRPM, Shooter_LOWRPM, Indexer_Power, Feeder_Power, PVALUE, IVALUE, DVALUE;
 	private final PIDController shooterPidController;
@@ -30,11 +30,11 @@ public class BallControl {
 		Util.consoleLog();
 		this.robot = robot;
 		Intake_Power= 0.8; //TODO Get true power readouts
-		Indexer_Power = -0.25;
-		Feeder_Power =0.8;
+		Indexer_Power = -0.4;
+		Feeder_Power =-0.8;
 		intakeStop();
 		choke();
-		encoder.reset();
+		//encoder.reset();
 		tlEncoder.reset();
 		tlEncoder.setDistancePerPulse(1);
 		tlEncoder.setPIDSourceType(PIDSourceType.kRate);
@@ -75,7 +75,7 @@ public class BallControl {
 		if (shooterMotor1 != null) shooterMotor1.free();
 		if (ShooterIndexer != null) ShooterIndexer.free();
 		if (shooterFeederMotor !=null) shooterFeederMotor.free();
-		if (encoder != null) encoder.free();
+		//if (encoder != null) encoder.free();
 		if (intakeMotor != null) intakeMotor.free();
 		
 		if (tlEncoder != null) tlEncoder.free();
@@ -88,9 +88,14 @@ public class BallControl {
 		{
 			intakeMotor.set(0);
 		}
-		else
+		else if (SmartDashboard.getBoolean("GearPickupDown") == true)
 		{
 		intakeMotor.set(power);
+		}
+		else
+		{
+			Util.consoleLog("Gear Elbow In! not intaking");
+			intakeMotor.set(0);
 		}
 		if (power != 0)
 		{
@@ -106,27 +111,27 @@ public class BallControl {
 	public void shooterSet(double power)
 	{
 		Util.consoleLog("%f", power);
-		
-		if (SmartDashboard.getBoolean("PIDEnabled", false))
-		{ 
-			if (power == 0) {
-				shooterMotor1.set(0);
-			}
-			if (power == Shooter_LOWPower)
-			{
-				holdShooterRPM(SmartDashboard.getNumber("LowSetting", Shooter_LOWRPM));
-			}
-			else if (power == Shooter_HIGHPower)
-			{
-				holdShooterRPM(SmartDashboard.getNumber("HighSetting", Shooter_HIGHRPM));
-			}
-			else
-				shooterMotor1.set(power);
-		}
-		else
-		{
+//		
+//		if (SmartDashboard.getBoolean("PIDEnabled", false))
+//		{ 
+//			if (power == 0) {
+//				shooterMotor1.set(0);
+//			}
+//			if (power == Shooter_LOWPower)
+//			{
+//				holdShooterRPM(SmartDashboard.getNumber("LowSetting", Shooter_LOWRPM));
+//			}
+//			else if (power == Shooter_HIGHPower)
+//			{
+//				holdShooterRPM(SmartDashboard.getNumber("HighSetting", Shooter_HIGHRPM));
+//			}
+//			else
+//				shooterMotor1.set(power);
+//		}
+//		else
+		//{
 			shooterMotor1.set(power);
-		}
+		//}
 		if (power != 0)
 		{
 			Util.consoleLog("Shooter Motors Active");
@@ -157,7 +162,7 @@ public class BallControl {
 	{
 		Util.consoleLog("Loading the cannon");
 		ShooterIndexer.set(Indexer_Power);
-		//shooterFeederMotor.set(Feeder_Power);
+		shooterFeederMotor.set(Feeder_Power);
 		SmartDashboard.putBoolean("DispenserMotor", true);
 	}
 	public void Swab()
@@ -170,24 +175,24 @@ public class BallControl {
 	public void fire()
 	{
 		Util.consoleLog();
-		load();
 		shooterSet(Shooter_HIGHPower);
 	}
 	public void ceaseFire()
 	{
 		Util.consoleLog();
 		shooterSet(0);
-		Swab();
 	}
 	public void feed()
 	{
 		Util.consoleLog();
 		shooterFeederMotor.set(0.45);
+		load();
 	}
 	public void choke()
 	{
 		Util.consoleLog();
 		shooterFeederMotor.set(0);
+		Swab();
 	}
 	public void vomit()
 	{
@@ -264,14 +269,14 @@ public class BallControl {
 		@Override
 		public double pidGet()
 		{
-			if (encoder != null)
-			{
-			if (encoder.getPIDSourceType() == PIDSourceType.kRate)
-				return getRate();
-			else
-				return get();
-			}
-			else if (counter != null)
+			//if (encoder != null)
+//			{
+//			if (encoder.getPIDSourceType() == PIDSourceType.kRate)
+//				return getRate();
+//			else
+				//return get();
+			//}
+			if (counter != null)
 			{
 				if (counter.getPIDSourceType() == PIDSourceType.kRate)
 					return getRate();

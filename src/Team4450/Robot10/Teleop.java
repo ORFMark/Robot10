@@ -10,6 +10,7 @@ import Team4450.Robot10.BallControl;
 import Team4450.Robot10.Gear;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 class Teleop
 {
@@ -122,7 +123,7 @@ class Teleop
 		if (robot.isComp) robot.SetCANTalonBrakeMode(lpControl.latchedState);
 
 		// Set gyro to heading 0.
-		
+
 		//robot.navx.resetYaw();
 		//robot.navx.dumpValuesToNetworkTables();
 		robot.navx.resetYaw();
@@ -185,8 +186,8 @@ class Teleop
 			else
 				joystickValue = joystickValue / 1.5 - .4;
 		}
-		
-	    return joystickValue;
+
+		return joystickValue;
 	}
 
 	// Custom base logrithim.
@@ -210,47 +211,47 @@ class Teleop
 			joystickValue = -baseLog(base, -joystickValue + 1);
 		if (jackRabbit == true)
 		{
-		output = joystickValue;
-		if (output == 0) {
-	        newstick = 0;
-	    }
-	    else if (output >= 0)
-	    {
-	        if (change >= 0.05)
-	        {
-	            newstick = oldstick + 0.05;
-	        }
-	        else if (change <= -0.05)
-	        {
-	            newstick = oldstick - 0.05;
-	        }
-	        else newstick = output;
-	    }
-	    else if (output <= 0)
-	    {
-	        if (change >= 0.05)
-	        {
-	            newstick = oldstick - 0.05;
-	        }
-	        else if (change <= -0.05)
-	        {
-	            newstick = oldstick + 0.05;
-	        }
-	        else
-	        {
-	            newstick = output;
-	        }
-	    }
-	    else
-	        newstick = output;
-	    oldstick = newstick;
-	    return newstick;
+			output = joystickValue;
+			if (output == 0) {
+				newstick = 0;
+			}
+			else if (output >= 0)
+			{
+				if (change >= 0.05)
+				{
+					newstick = oldstick + 0.05;
+				}
+				else if (change <= -0.05)
+				{
+					newstick = oldstick - 0.05;
+				}
+				else newstick = output;
+			}
+			else if (output <= 0)
+			{
+				if (change >= 0.05)
+				{
+					newstick = oldstick - 0.05;
+				}
+				else if (change <= -0.05)
+				{
+					newstick = oldstick + 0.05;
+				}
+				else
+				{
+					newstick = output;
+				}
+			}
+			else
+				newstick = output;
+			oldstick = newstick;
+			return newstick;
 		}
 		else
 			return joystickValue;
 		//return joystickValue;
 	}
-	
+
 	private double climbLogCorrection(double joystickValue)
 
 	{
@@ -309,11 +310,11 @@ class Teleop
 			{
 				if (launchPadEvent.control.latchedState)
 				{
-					gear.gearUp();
+					gear.gearDown();
 				}
 				else
 				{
-					gear.gearDown();
+					gear.gearUp();
 				}
 				break;
 			}
@@ -321,11 +322,11 @@ class Teleop
 			{
 				if (launchPadEvent.control.latchedState)
 				{
-					gear.gearElevatorUp();
+					gear.gearElevatorDown();
 				}
 				else
 				{
-					gear.gearElevatorDown();
+					gear.gearElevatorUp();
 				}
 			}
 
@@ -488,11 +489,11 @@ class Teleop
 			{
 				if (button.latchedState)
 				{
-					ballControl.feed();
+					ballControl.load();
 				}
 				else
 				{
-					ballControl.choke();
+					ballControl.Swab();
 				}
 				break;
 			}
@@ -506,25 +507,38 @@ class Teleop
 				{
 					ballControl.ceaseFire();
 				}
+				break;
 			}
 			case TOP_RIGHT:
 			{
 				if (button.latchedState)
 				{
 					ballControl.intakeIn();
-					if (ballControl.shooterMotor1.get() <= 0)
-					{
-						ballControl.vomit();
-					}
+					
 				}
 				else
 				{
 					ballControl.intakeStop();
-					if (ballControl.shooterMotor1.get() == 0)
-						ballControl.choke();
 				}
+				break;
 			}
-			
+			case TOP_BACK:
+			{
+				if (button.latchedState)
+					gear.gearIntakeOut();
+				else
+					gear.gearIntakeStop();
+				break;
+			}
+			case TOP_MIDDLE:
+			{
+				if (button.latchedState)
+					gear.gearIntakeIn();
+				else
+					gear.gearIntakeStop();
+				break;
+			}
+
 			default:
 				break;
 			}

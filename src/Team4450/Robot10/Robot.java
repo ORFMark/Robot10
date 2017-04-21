@@ -30,7 +30,7 @@ import com.ctre.CANTalon.*;
 
 public class Robot extends SampleRobot 
 {
-	static final String  	PROGRAM_NAME = "MRB10-4.13.17-01";
+	static final String  	PROGRAM_NAME = "MRB10-4.17.17-01";
 
 
 	// Motor CAN ID/PWM port assignments (1=left-front, 2=left-rear, 3=right-front, 4=right-rear)
@@ -79,6 +79,7 @@ public class Robot extends SampleRobot
 
 		try
 		{
+			Util.consoleLog("______________________________________________________________________________________________________");
 			Util.consoleLog(PROGRAM_NAME);
 
 			Util.consoleLog("RobotLib=%s", LibraryVersion.version);
