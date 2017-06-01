@@ -11,6 +11,7 @@ import Team4450.Robot10.Gear;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 class Teleop
 {
@@ -21,6 +22,7 @@ class Teleop
 	private final Vision 		vision;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
+	public AnalogInput PessureSensor = new AnalogInput(0);
 	private boolean				autoTarget = false, invertDrive = false, jackRabbit = false;
 	double output = 0;
 	double oldstick =0;
@@ -60,6 +62,7 @@ class Teleop
 		if (gear != null) gear.dispose();
 		if (ballControl != null) ballControl.dispose();
 		if (gearbox != null) gearbox.dispose();
+		if (PessureSensor != null) PessureSensor.free();
 		//if (encoder != null) encoder.free();
 	}
 
@@ -159,6 +162,8 @@ class Teleop
 			LCD.printLine(4, "leftY=%.4f  rightY=%.4f utilX=%.4f", leftY, rightY, utilX);
 			LCD.printLine(5, "shootenc=%d", ballControl.tlEncoder.get()); 
 			LCD.printLine(6, "yaw=%.0f, total=%.0f, rate=%.3f", robot.navx.getYaw(), robot.navx.getTotalYaw(), robot.navx.getYawRate());
+			LCD.printLine(7, "shootenc=%d rpm=%.0f pwr=%.2f", ballControl.shooterSpeedSource.get(), ballControl.shooterSpeedSource.getRate() * 60, ballControl.shooterMotor1.get());
+			LCD.printLine(8, "PSI = ", PSI(PessureSensor.getVoltage()));
 
 			// Set wheel motors.
 			// Do not feed JS input to robotDrive if we are controlling the motors in automatic functions.
@@ -189,7 +194,13 @@ class Teleop
 
 		return joystickValue;
 	}
-
+	
+	private double PSI(double InputVoltage)
+	{
+	//returns the PSI based on a Andymark Pressure Sensor
+		double SupplyVoltage = 5;
+		return 250 * (InputVoltage/SupplyVoltage) - 25;
+	}
 	// Custom base logrithim.
 	// Returns logrithim base of the value.
 
